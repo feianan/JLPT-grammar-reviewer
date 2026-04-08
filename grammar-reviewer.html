@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLPT N2 文法複習工具</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+        background: #f5f3ee;
+        color: #1a1a1a;
+        min-height: 100vh;
+      }
+      #app {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 4rem;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+      }
+      .logo {
+        font-size: 19px;
+        font-weight: 700;
+        color: #1a1a1a;
+        letter-spacing: 0.01em;
+      }
+      .logo span {
+        color: #b5451b;
+      }
+      .badge {
+        font-size: 12px;
+        background: #fdf0eb;
+        color: #b5451b;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 1px solid #e8bfb0;
+        font-weight: 600;
+      }
+      .progress-bar {
+        height: 4px;
+        background: #ddd8cc;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1.25rem;
+      }
+      .progress-fill {
+        height: 100%;
+        background: #b5451b;
+        border-radius: 2px;
+        transition: width 0.4s;
+      }
+      .tabs {
+        display: flex;
+        border-bottom: 1.5px solid #c5bfb0;
+        margin-bottom: 1.5rem;
+        overflow-x: auto;
+        gap: 0;
+      }
+      .tab {
+        padding: 10px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: #888;
+        border-bottom: 2.5px solid transparent;
+        margin-bottom: -1.5px;
+        transition: all 0.15s;
+        white-space: nowrap;
+        font-weight: 500;
+        font-family: inherit;
+      }
+      .tab.active {
+        color: #b5451b;
+        border-bottom-color: #b5451b;
+      }
+      .tab:hover:not(.active) {
+        color: #555;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #ddd8cc;
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+      .card + .card {
+        margin-top: 1rem;
+      }
+      .section-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #999;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .grammar-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1a1a1a;
+        letter-spacing: 0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .meaning {
+        font-size: 16px;
+        color: #b5451b;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .example-jp {
+        font-size: 15px;
+        color: #1a1a1a;
+        line-height: 1.9;
+        margin-bottom: 0.3rem;
+      }
+      .example-zh {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.6;
+      }
+      .tags {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+      }
+      .tag {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 12px;
+        background: #f2efe8;
+        color: #555;
+        border: 1px solid #ddd8cc;
+      }
+      button {
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #c5bfb0;
+        background: none;
+        font-size: 13px;
+        color: #555;
+        transition: all 0.15s;
+      }
+      .btn:hover {
+        background: #f2efe8;
+        color: #1a1a1a;
+      }
+      .btn-primary {
+        background: #b5451b;
+        color: #fff;
+        border-color: #b5451b;
+      }
+      .btn-primary:hover {
+        background: #9e3a17;
+        color: #fff;
+      }
+      .btn-sm {
+        padding: 5px 12px;
+        font-size: 12px;
+      }
+      .btn-ghost {
+        border-color: transparent;
+        color: #b5451b;
+        padding-left: 0;
+      }
+      .btn-ghost:hover {
+        background: none;
+        text-decoration: underline;
+      }
+      .search-wrap {
+        position: relative;
+        margin-bottom: 0.75rem;
+      }
+      .search-box {
+        width: 100%;
+        padding: 10px 36px 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #c5bfb0;
+        background: #fff;
+        color: #1a1a1a;
+        font-size: 14px;
+        outline: none;
+        font-family: inherit;
+      }
+      .search-box:focus {
+        border-color: #b5451b;
+      }
+      .search-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 2px 6px;
+      }
+      .filter-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      .filter-count {
+        font-size: 12px;
+        color: #888;
+      }
+      .select-sm {
+        padding: 5px 10px;
+        border-radius: 8px;
+        border: 1px solid #c5bfb0;
+        background: #fff;
+        color: #555;
+        font-size: 12px;
+        outline: none;
+        font-family: inherit;
+      }
+      .grammar-list {
+        display: flex;
+        flex-direction: column;
+      }
+      .grammar-item {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #eee8de;
+        cursor: pointer;
+        transition: background 0.1s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .grammar-item:last-child {
+        border-bottom: none;
+      }
+      .grammar-item:hover {
+        background: #fdf8f3;
+      }
+      .grammar-item-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+      .grammar-item-meaning {
+        font-size: 12px;
+        color: #888;
+        margin-top: 2px;
+      }
+      .mem-badge {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 10px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+        font-weight: 600;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .supplement {
+        margin-top: 0.75rem;
+        font-size: 13px;
+        color: #777;
+        padding: 0.75rem 1rem;
+        background: #faf8f4;
+        border-radius: 8px;
+        border-left: 3px solid #ddd8cc;
+        line-height: 1.7;
+        white-space: pre-wrap;
+      }
+      /* flashcard */
+      .fc-card {
+        background: #fff;
+        border: 1px solid #c5bfb0;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .fc-body {
+        width: 100%;
+        margin-top: 1.25rem;
+        position: relative;
+      }
+      .fc-answer {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        text-align: left;
+      }
+      .fc-answer.open {
+        visibility: visible;
+        opacity: 1;
+      }
+      .fc-btn-wrap {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        display: flex;
+        justify-content: center;
+        transition: opacity 0.2s ease;
+      }
+      .fc-btn-wrap.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .fc-divider {
+        width: 100%;
+        border: none;
+        border-top: 1px solid #ece8de;
+        margin: 0 0 1.25rem 0;
+      }
+      /* ai */
+      .ai-output {
+        background: #faf8f4;
+        border-radius: 8px;
+        padding: 1rem 1.1rem;
+        font-size: 13px;
+        color: #555;
+        line-height: 1.9;
+        white-space: pre-wrap;
+        min-height: 60px;
+        border: 1px solid #eee8de;
+      }
+      .loading-dots::after {
+        content: "";
+        animation: dots 1.2s steps(3, end) infinite;
+      }
+      @keyframes dots {
+        0%,
+        20% {
+          content: "";
+        }
+        40% {
+          content: ".";
+        }
+        60% {
+          content: "..";
+        }
+        80%,
+        100% {
+          content: "...";
+        }
+      }
+      /* grid */
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+      @media (max-width: 500px) {
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stat {
+        text-align: center;
+        padding: 1rem 0.5rem;
+        background: #fff;
+        border: 1px solid #ddd8cc;
+        border-radius: 10px;
+      }
+      .stat-num {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: #888;
+        margin-top: 3px;
+      }
+      /* compare */
+      .compare-card {
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid #ddd8cc;
+        background: #fff;
+      }
+      .nuance-box {
+        background: #fdf0eb;
+        border-left: 3px solid #b5451b;
+        padding: 0.75rem 1rem;
+        border-radius: 0 8px 8px 0;
+        font-size: 13px;
+        color: #555;
+        line-height: 1.7;
+        margin-top: 0.75rem;
+      }
+      .select-input {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #c5bfb0;
+        background: #fff;
+        color: #1a1a1a;
+        font-size: 13px;
+        outline: none;
+        font-family: inherit;
+        max-width: 100%;
+      }
+      /* quiz */
+      .quiz-option {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid #c5bfb0;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+        transition: all 0.15s;
+        text-align: left;
+        background: #fff;
+        font-family: inherit;
+      }
+      .quiz-option:hover:not(:disabled) {
+        border-color: #b5451b;
+        color: #1a1a1a;
+        background: #fdf0eb;
+      }
+      .quiz-option.correct {
+        background: #e8f5e9;
+        border-color: #4caf50;
+        color: #1b5e20;
+        font-weight: 600;
+      }
+      .quiz-option.wrong {
+        background: #ffebee;
+        border-color: #ef5350;
+        color: #b71c1c;
+      }
+      .quiz-option:disabled {
+        cursor: default;
+      }
+      .result-box {
+        background: #fdf0eb;
+        border-left: 3px solid #b5451b;
+        padding: 0.75rem 1rem;
+        border-radius: 0 8px 8px 0;
+        font-size: 13px;
+        color: #555;
+        line-height: 1.7;
+        margin-top: 1rem;
+      }
+      /* pagination */
+      .pager {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+      .pager-btn {
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid #c5bfb0;
+        background: none;
+        font-size: 12px;
+        color: #555;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .pager-btn:hover {
+        background: #f2efe8;
+      }
+      .pager-btn.active {
+        background: #b5451b;
+        color: #fff;
+        border-color: #b5451b;
+      }
+      .pager-info {
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="header">
+        <div class="logo">N2 <span>文法</span>複習</div>
+        <div class="badge" id="total-badge">載入中...</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="prog" style="width: 0%"></div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('browse')">
+          📚 瀏覽
+        </button>
+        <button class="tab" onclick="switchTab('flashcard')">🃏 閃卡</button>
+        <button class="tab" onclick="switchTab('compare')">⚖️ 語氣比較</button>
+        <button class="tab" onclick="switchTab('quiz')">✏️ 翻譯挑戰</button>
+      </div>
+      <div id="tab-browse"></div>
+      <div id="tab-flashcard" style="display: none"></div>
+      <div id="tab-compare" style="display: none"></div>
+      <div id="tab-quiz" style="display: none"></div>
+    </div>
+    <script src="grammar-data.js"></script>
+    <script src="compare-pairs.js"></script>
+    <script>
+      const PAGE_SIZE = 30;
+      if (!localStorage.getItem("n2mem_v2_reset")) {
+        localStorage.removeItem("n2mem_v2");
+        localStorage.setItem("n2mem_v2_reset", "1");
+      }
+      let memorized = new Set(
+        JSON.parse(localStorage.getItem("n2mem_v2") || "[]"),
+      );
+
+      let currentTab = "browse";
+      let fcIndex = 0;
+      let fcFlipped = false;
+      let fcPool = [];
+      let quizState = null;
+      let searchQ = "";
+      let filterMem = "all"; // all | no | yes
+      let browseOffset = 0;
+      let activeDetail = null;
+      let cmpIdx = 0;
+      let aiCache = {};
+
+      function saveMem() {
+        localStorage.setItem("n2mem_v2", JSON.stringify([...memorized]));
+      }
+      function pct() {
+        return GRAMMAR_DB.length
+          ? Math.round((memorized.size / GRAMMAR_DB.length) * 100)
+          : 0;
+      }
+
+      function updateProgress() {
+        document.getElementById("prog").style.width = pct() + "%";
+        document.getElementById("total-badge").textContent =
+          `記住 ${memorized.size}／${GRAMMAR_DB.length}`;
+      }
+
+      function switchTab(tab) {
+        currentTab = tab;
+        activeDetail = null;
+        document.querySelectorAll(".tab").forEach((t) => {
+          const map = {
+            browse: "瀏覽",
+            flashcard: "閃卡",
+            compare: "語氣比較",
+            quiz: "翻譯挑戰",
+          };
+          t.classList.toggle("active", t.textContent.includes(map[tab]));
+        });
+        ["browse", "flashcard", "compare", "quiz"].forEach((t) => {
+          document.getElementById("tab-" + t).style.display =
+            t === tab ? "block" : "none";
+        });
+        renderTab(tab);
+      }
+
+      function renderTab(tab) {
+        if (tab === "browse") renderBrowse();
+        if (tab === "flashcard") renderFlashcard(true);
+        if (tab === "compare") renderCompare();
+        if (tab === "quiz") renderQuiz();
+      }
+
+      /* ── BROWSE ── */
+      function getFiltered() {
+        return GRAMMAR_DB.filter((g) => {
+          const q = searchQ.toLowerCase();
+          const matchQ =
+            !q ||
+            g.grammar.includes(q) ||
+            g.meaning.includes(q) ||
+            (g.example_zh || "").includes(q) ||
+            (g.example_jp || "").includes(q);
+          const matchMem =
+            filterMem === "all" ||
+            (filterMem === "yes" && memorized.has(g.id)) ||
+            (filterMem === "no" && !memorized.has(g.id));
+          return matchQ && matchMem;
+        });
+      }
+
+      function renderBrowse() {
+        if (activeDetail) {
+          showDetail(activeDetail);
+          return;
+        }
+        const el = document.getElementById("tab-browse");
+        const filtered = getFiltered();
+        const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+        const page = Math.floor(browseOffset / PAGE_SIZE);
+        const slice = filtered.slice(browseOffset, browseOffset + PAGE_SIZE);
+
+        el.innerHTML = `
+    <div class="search-wrap">
+      <input class="search-box" placeholder="搜尋文法、中文意思、例句..." oninput="searchQ=this.value;browseOffset=0;renderBrowse()" value="${searchQ.replace(/"/g, "&quot;")}">
+      ${searchQ ? `<button class="search-clear" onclick="searchQ='';browseOffset=0;renderBrowse()">✕</button>` : ""}
+    </div>
+    <div class="filter-row">
+      <select class="select-sm" onchange="filterMem=this.value;browseOffset=0;renderBrowse()">
+        <option value="all" ${filterMem === "all" ? "selected" : ""}>全部</option>
+        <option value="no" ${filterMem === "no" ? "selected" : ""}>未記住</option>
+        <option value="yes" ${filterMem === "yes" ? "selected" : ""}>已記住</option>
+      </select>
+      <span class="filter-count">共 ${filtered.length} 個文法</span>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="grammar-list">
+        ${slice
+          .map(
+            (g) => `
+          <div class="grammar-item" onclick="activeDetail=${g.id};renderBrowse()">
+            <div>
+              <div class="grammar-item-name">${esc(g.grammar)}</div>
+              <div class="grammar-item-meaning">${esc(g.meaning)}</div>
+            </div>
+            ${memorized.has(g.id) ? '<span class="mem-badge">✓ 已記住</span>' : ""}
+          </div>`,
+          )
+          .join("")}
+      </div>
+    </div>
+    ${totalPages > 1 ? renderPager(page, totalPages, filtered.length) : ""}
+  `;
+      }
+
+      function renderPager(page, total, count) {
+        const start = page * PAGE_SIZE + 1;
+        const end = Math.min((page + 1) * PAGE_SIZE, count);
+        let btns = "";
+        for (let i = 0; i < total; i++) {
+          btns += `<button class="pager-btn ${i === page ? "active" : ""}" onclick="browseOffset=${i * PAGE_SIZE};renderBrowse()">${i + 1}</button>`;
+        }
+        return `<div class="pager"><span class="pager-info">${start}–${end} / ${count}</span>${btns}</div>`;
+      }
+
+      function showDetail(id) {
+        const g = GRAMMAR_DB.find((x) => x.id === id);
+        if (!g) return;
+        const isM = memorized.has(id);
+        document.getElementById("tab-browse").innerHTML = `
+    <button class="btn btn-ghost" onclick="activeDetail=null;renderBrowse()">← 返回列表</button>
+    <div class="card" style="margin-top:.75rem">
+      <div class="section-label">文法</div>
+      <div class="grammar-title">${esc(g.grammar)}</div>
+      <div class="meaning">${esc(g.meaning)}</div>
+      <div class="tags">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
+      ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
+      ${g.page ? `<div style="margin-top:.75rem;font-size:12px;color:#aaa">文法比較辭典 p.${g.page}</div>` : ""}
+    </div>
+    <div class="card">
+      <div class="section-label">例句</div>
+      <div class="example-jp">${esc(g.example_jp)}</div>
+      ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+        <div class="section-label" style="margin:0">AI 生成更多例句</div>
+        ${aiCache["ex" + id]
+          ? `<button class="btn btn-sm" onclick="genExamples(${id},true)">重新生成</button>`
+          : `<button class="btn btn-sm btn-primary" onclick="genExamples(${id},false)">生成 AI 例句</button>`
+        }
+      </div>
+      ${aiCache["ex" + id]
+        ? `<div class="ai-output" id="ai-ex">${esc(aiCache["ex" + id])}</div>`
+        : `<div id="ai-ex" style="font-size:13px;color:#aaa;padding:.5rem 0">點擊「生成 AI 例句」按鈕來生成</div>`
+      }
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn ${isM ? "btn-primary" : ""}" onclick="toggleMem(${id})">${isM ? "✓ 已記住（點擊取消）" : "標記為已記住"}</button>
+    </div>
+  `;
+      }
+
+      function toggleMem(id) {
+        if (memorized.has(id)) memorized.delete(id);
+        else memorized.add(id);
+        saveMem();
+        updateProgress();
+        showDetail(id);
+      }
+
+      async function genExamples(id, force) {
+        const g = GRAMMAR_DB.find((x) => x.id === id);
+        if (!g) return;
+        if (!force && aiCache["ex" + id]) {
+          const el = document.getElementById("ai-ex");
+          if (el) {
+            el.className = "ai-output";
+            el.textContent = aiCache["ex" + id];
+          }
+          return;
+        }
+        const el = document.getElementById("ai-ex");
+        if (el) {
+          el.className = "ai-output loading-dots";
+          el.textContent = "生成中";
+        }
+        try {
+          const r = await fetch("/api/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-6",
+              max_tokens: 900,
+              messages: [
+                {
+                  role: "user",
+                  content: `你是 JLPT N2 日文教師。請為文法「${g.grammar}」（意思：${g.meaning}）生成 3 個自然的日文例句，每句附上繁體中文翻譯，難度適合 N2 考生。格式嚴格如下，不要加任何其他文字：
+
+① 日文例句
+　繁體中文翻譯
+
+② 日文例句
+　繁體中文翻譯
+
+③ 日文例句
+　繁體中文翻譯`,
+                },
+              ],
+            }),
+          });
+          const d = await r.json();
+          const text = d.content[0].text;
+          aiCache["ex" + id] = text;
+          const cur = document.getElementById("ai-ex");
+          if (cur) {
+            cur.className = "ai-output";
+            cur.textContent = text;
+          }
+        } catch (e) {
+          const cur = document.getElementById("ai-ex");
+          if (cur) {
+            cur.className = "ai-output";
+            cur.textContent = "⚠️ 生成失敗，請再試一次。";
+          }
+        }
+      }
+
+      function shuffleArray(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      /* ── FLASHCARD ── */
+      function renderFlashcard(reshuffle = false) {
+        const unmem = GRAMMAR_DB.filter((g) => !memorized.has(g.id));
+        const base = unmem.length ? unmem : GRAMMAR_DB;
+        if (reshuffle || fcPool.length !== base.length) {
+          fcPool = shuffleArray(base);
+          fcIndex = 0;
+        }
+        if (fcIndex >= fcPool.length) {
+          fcPool = shuffleArray(base);
+          fcIndex = 0;
+        }
+        const pool = fcPool;
+        const g = pool[fcIndex];
+        fcFlipped = false;
+        document.getElementById("tab-flashcard").innerHTML = `
+    <div class="grid2" style="margin-bottom:1rem">
+      <div class="stat"><div class="stat-num">${memorized.size}</div><div class="stat-label">已記住</div></div>
+      <div class="stat"><div class="stat-num">${GRAMMAR_DB.length - memorized.size}</div><div class="stat-label">待記住</div></div>
+    </div>
+    <div class="fc-card">
+      <div class="section-label" style="margin-bottom:.5rem">這個文法的意思是？</div>
+      <div style="font-size:28px;font-weight:700;color:#1a1a1a;margin:1rem 0;letter-spacing:.02em">${esc(g.grammar)}</div>
+      <div class="tags" style="justify-content:center">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
+      <div class="fc-body">
+        <div class="fc-answer" id="fc-reveal">
+          <hr class="fc-divider">
+          <div class="meaning" style="font-size:20px;text-align:center">${esc(g.meaning)}</div>
+          <div style="margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto">
+            <div class="example-jp">${esc(g.example_jp)}</div>
+            ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+          </div>
+          ${g.supplement ? `<div style="font-size:12px;color:#aaa;margin-top:.75rem;text-align:center">${esc(g.supplement)}</div>` : ""}
+        </div>
+        <div class="fc-btn-wrap" id="fc-hint">
+          <button class="btn" onclick="flipCard()">查看答案</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:.75rem;margin-top:.25rem">
+      <button class="btn" onclick="fcForget(${g.id})">忘記</button>
+      <button class="btn btn-primary" onclick="fcMemorize(${g.id})">記住 ✓</button>
+    </div>
+    <div style="text-align:center;margin-top:.75rem;font-size:12px;color:#aaa">${fcIndex + 1} / ${pool.length}（隨機順序）</div>
+  `;
+      }
+
+      function flipCard() {
+        const reveal = document.getElementById("fc-reveal");
+        const hint = document.getElementById("fc-hint");
+        if (!reveal) return;
+        fcFlipped = true;
+        reveal.classList.add("open");
+        if (hint) hint.classList.add("hidden");
+      }
+      function fcMemorize(id) {
+        memorized.add(id);
+        saveMem();
+        updateProgress();
+        fcIndex++;
+        renderFlashcard();
+      }
+      function fcForget(id) {
+        memorized.delete(id);
+        saveMem();
+        updateProgress();
+        fcIndex++;
+        renderFlashcard();
+      }
+
+      /* ── COMPARE ── */
+      function renderCompare() {
+        const el = document.getElementById("tab-compare");
+        el.innerHTML = `
+    <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:13px;color:#555;font-weight:500">比較主題：</span>
+      <select class="select-input" id="cmp-sel" onchange="cmpIdx=parseInt(this.value);renderCompareDetail()">
+        ${COMPARE_PAIRS.map((p, i) => `<option value="${i}" ${i === cmpIdx ? "selected" : ""}>${p.label}</option>`).join("")}
+      </select>
+    </div>
+    <div id="cmp-detail"></div>
+  `;
+        renderCompareDetail();
+      }
+
+      function renderCompareDetail() {
+        const pair = COMPARE_PAIRS[cmpIdx];
+        const el = document.getElementById("cmp-detail");
+        el.innerHTML = `
+    <div class="grid2">
+      ${pair.items
+        .map((item) => {
+          const g = GRAMMAR_DB.find((x) => x.grammar === item.grammar) || {};
+          return `<div class="compare-card">
+          <div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:3px">${esc(item.grammar)}</div>
+          <div style="font-size:12px;color:#b5451b;margin-bottom:.5rem">${esc(g.meaning || "")}</div>
+          <div class="nuance-box">${esc(item.nuance)}</div>
+          ${g.example_jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:13px">${esc(g.example_jp)}</div>${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}</div>` : ""}
+        </div>`;
+        })
+        .join("")}
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+        <div class="section-label" style="margin:0">AI 深度語氣分析</div>
+        ${aiCache["cmp" + cmpIdx]
+          ? `<button class="btn btn-sm" onclick="genCompare(${cmpIdx},true)">重新分析</button>`
+          : `<button class="btn btn-sm btn-primary" onclick="genCompare(${cmpIdx},false)">開始 AI 分析</button>`
+        }
+      </div>
+      ${aiCache["cmp" + cmpIdx]
+        ? `<div class="ai-output" id="ai-cmp">${esc(aiCache["cmp" + cmpIdx])}</div>`
+        : `<div id="ai-cmp" style="font-size:13px;color:#aaa;padding:.5rem 0">點擊「開始 AI 分析」按鈕來生成語氣比較</div>`
+      }
+    </div>
+  `;
+      }
+
+      async function genCompare(idx, force) {
+        const pair = COMPARE_PAIRS[idx];
+        if (!force && aiCache["cmp" + idx]) {
+          const el = document.getElementById("ai-cmp");
+          if (el) {
+            el.className = "ai-output";
+            el.textContent = aiCache["cmp" + idx];
+          }
+          return;
+        }
+        const el = document.getElementById("ai-cmp");
+        if (el) {
+          el.className = "ai-output loading-dots";
+          el.textContent = "分析中";
+        }
+        try {
+          const r = await fetch("/api/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-6",
+              max_tokens: 1000,
+              messages: [{ role: "user", content: pair.prompt }],
+            }),
+          });
+          const d = await r.json();
+          const text = d.content[0].text;
+          aiCache["cmp" + idx] = text;
+          const cur = document.getElementById("ai-cmp");
+          if (cur) {
+            cur.className = "ai-output";
+            cur.textContent = text;
+          }
+        } catch (e) {
+          const cur = document.getElementById("ai-cmp");
+          if (cur) {
+            cur.className = "ai-output";
+            cur.textContent = "⚠️ 生成失敗。";
+          }
+        }
+      }
+
+      /* ── QUIZ ── */
+      function renderQuiz() {
+        const el = document.getElementById("tab-quiz");
+        if (!quizState) {
+          el.innerHTML = `
+      <div class="card" style="text-align:center;padding:2.5rem 1.5rem">
+        <div style="font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:.5rem">翻譯挑戰</div>
+        <div style="font-size:13px;color:#888;margin-bottom:1.5rem;line-height:1.8">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法<br><br>
+          <label style="font-size:12px;color:#555"><input type="checkbox" id="quiz-unmem-only" style="margin-right:4px">只出未記住的文法</label>
+        </div>
+        <button class="btn btn-primary" onclick="startQuiz()" style="padding:10px 24px;font-size:14px">開始測驗</button>
+      </div>`;
+          return;
+        }
+        const { q, opts, answered, score, total, mode } = quizState;
+        el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <span style="font-size:13px;color:#555">得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <button class="btn btn-sm" onclick="quizState=null;renderQuiz()">結束</button>
+    </div>
+    <div class="card">
+      <div class="section-label" style="margin-bottom:.75rem">${mode === "zh" ? "這個例句的正確中文意思是？" : "這個中文意思對應的日文文法是？"}</div>
+      <div style="font-size:${mode === "zh" ? "16" : "18"}px;color:#1a1a1a;line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.example_jp : q.meaning)}</div>
+      <div>
+        ${opts
+          .map((opt, i) => {
+            let cls = "quiz-option";
+            if (answered !== null) {
+              if (opt.id === q.id) cls += " correct";
+              else if (i === answered && opt.id !== q.id) cls += " wrong";
+            }
+            return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered !== null ? "disabled" : ""}>${esc(mode === "zh" ? opt.meaning : opt.grammar)}</button>`;
+          })
+          .join("")}
+      </div>
+      ${
+        answered !== null
+          ? `
+        <div class="result-box">
+          ${answered === opts.findIndex((o) => o.id === q.id) ? "✓ 正確！" : "✗ 答錯了。"}<br>
+          <strong>${esc(q.grammar)}</strong>　${esc(q.meaning)}<br>
+          ${q.example_jp ? `<span style="font-size:12px;color:#777">${esc(q.example_jp)}　${esc(q.example_zh || "")}</span>` : ""}
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="nextQuiz()">下一題 →</button>
+      `
+          : ""
+      }
+    </div>
+  `;
+      }
+
+      function startQuiz() {
+        const unmeOnly = document.getElementById("quiz-unmem-only")?.checked;
+        quizState = {
+          q: null,
+          opts: [],
+          answered: null,
+          score: 0,
+          total: 0,
+          mode: "zh",
+          unmeOnly,
+        };
+        nextQuiz();
+      }
+      function nextQuiz() {
+        const pool = quizState.unmeOnly
+          ? GRAMMAR_DB.filter((g) => !memorized.has(g.id))
+          : GRAMMAR_DB;
+        if (!pool.length) {
+          quizState = null;
+          renderQuiz();
+          return;
+        }
+        const q = pool[Math.floor(Math.random() * pool.length)];
+        const wrong = GRAMMAR_DB.filter((x) => x.id !== q.id)
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3);
+        const opts = [q, ...wrong].sort(() => Math.random() - 0.5);
+        const mode = Math.random() < 0.5 ? "zh" : "jp";
+        quizState = { ...quizState, q, opts, answered: null, mode };
+        renderQuiz();
+      }
+      function answerQuiz(i) {
+        const right = quizState.opts[i].id === quizState.q.id;
+        quizState = {
+          ...quizState,
+          answered: i,
+          score: quizState.score + (right ? 1 : 0),
+          total: quizState.total + 1,
+        };
+        renderQuiz();
+      }
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      updateProgress();
+      renderBrowse();
+    </script>
+  </body>
+</html>
