@@ -8,10 +8,10 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="../src/grammar-data.js"></script>
-    <script src="../src/compare-pairs.js"></script>
-    <script src="../src/shared-state.js"></script>
-    <script src="../src/header-nav.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/grammar-data.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/compare-pairs.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/shared-state.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/header-nav.js"></script>
     <script>
       const PAGE_SIZE = 30;
       let cycles = MemoryState.load();
@@ -35,8 +35,8 @@
             !q ||
             g.grammar.includes(q) ||
             g.meaning.includes(q) ||
-            (g.example_zh || "").includes(q) ||
-            (g.example_jp || "").includes(q);
+            (g.examples[0]?.zh || "").includes(q) ||
+            (g.examples[0]?.jp || "").includes(q);
           const cycle = MemoryState.getCycle(g.id, cycles);
           const matchMem =
             filterMem === "all" ||
@@ -139,8 +139,8 @@
     </div>
     <div class="card">
       <div class="section-label">例句</div>
-      <div class="example-jp">${esc(g.example_jp)}</div>
-      ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+      <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
+      ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
     </div>
     <div style="display:flex;gap:var(--space-md);margin-top:1rem;flex-wrap:wrap">
       ${cycle > 0 ? `<button class="btn" onclick="forgetGrammar(${id})">忘記（- 週期）</button>` : ""}

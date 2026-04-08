@@ -8,10 +8,10 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="../src/grammar-data.js"></script>
-    <script src="../src/compare-pairs.js"></script>
-    <script src="../src/shared-state.js"></script>
-    <script src="../src/header-nav.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/grammar-data.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/compare-pairs.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/shared-state.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/header-nav.js"></script>
     <script>
       let cycles = MemoryState.load();
       let quizState = null;
@@ -40,7 +40,7 @@
     </div>
     <div class="card">
       <div class="section-label" style="margin-bottom:.75rem">${mode === "zh" ? "這個例句的正確中文意思是？" : "這個中文意思對應的日文文法是？"}</div>
-      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-lg)"};color:var(--color-text-primary);line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.example_jp : q.meaning)}</div>
+      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-lg)"};color:var(--color-text-primary);line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
       <div>
         ${opts
           .map((opt, i) => {
@@ -59,7 +59,7 @@
         <div class="result-box">
           ${answered === opts.findIndex((o) => o.id === q.id) ? "✓ 正確！" : "✗ 答錯了。"}<br>
           <strong>${esc(q.grammar)}</strong>　${esc(q.meaning)}<br>
-          ${q.example_jp ? `<span style="font-size:var(--font-xs);color:var(--color-text-secondary)">${esc(q.example_jp)}　${esc(q.example_zh || "")}</span>` : ""}
+          ${q.examples[0]?.jp ? `<span style="font-size:var(--font-xs);color:var(--color-text-secondary)">${esc(q.examples[0].jp)}　${esc(q.examples[0]?.zh || "")}</span>` : ""}
         </div>
         <button class="btn btn-primary" style="margin-top:1rem" onclick="nextQuiz()">下一題 →</button>
       `
