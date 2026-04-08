@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLPT N2 文法複習 - 瀏覽</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../src/grammar-data.js"></script>
+    <script src="../src/compare-pairs.js"></script>
+    <script src="../src/shared-state.js"></script>
+    <script src="../src/header-nav.js"></script>
+    <script>
+      const PAGE_SIZE = 30;
+      let cycles = MemoryState.load();
+      let searchQ = "";
+      let filterMem = "all";
+      let sortBy = "id"; // id, cycle_asc, cycle_desc
+      let browseOffset = 0;
+      let activeDetail = null;
+
+      initHeaderNav("browse");
+      updateProgress();
+
+      function saveCycles() {
+        MemoryState.save(cycles);
+      }
+
+      function getFiltered() {
+        let filtered = GRAMMAR_DB.filter((g) => {
+          const q = searchQ.toLowerCase();
+          const matchQ =
+            !q ||
+            g.grammar.includes(q) ||
+            g.meaning.includes(q) ||
+            (g.example_zh || "").includes(q) ||
+            (g.example_jp || "").includes(q);
+          const cycle = MemoryState.getCycle(g.id, cycles);
+          const matchMem =
+            filterMem === "all" ||
+            (filterMem === "yes" && cycle > 0) ||
+            (filterMem === "no" && cycle === 0);
+          return matchQ && matchMem;
+        });
+
+        // Sort by cycle
+        if (sortBy === "cycle_asc") {
+          filtered.sort((a, b) => {
+            const cycleA = MemoryState.getCycle(a.id, cycles);
+            const cycleB = MemoryState.getCycle(b.id, cycles);
+            return cycleA - cycleB;
+          });
+        } else if (sortBy === "cycle_desc") {
+          filtered.sort((a, b) => {
+            const cycleA = MemoryState.getCycle(a.id, cycles);
+            const cycleB = MemoryState.getCycle(b.id, cycles);
+            return cycleB - cycleA;
+          });
+        }
+
+        return filtered;
+      }
+
+      function renderBrowse() {
+        if (activeDetail) {
+          showDetail(activeDetail);
+          return;
+        }
+        const el = document.getElementById("tab-content");
+        const filtered = getFiltered();
+        const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+        const page = Math.floor(browseOffset / PAGE_SIZE);
+        const slice = filtered.slice(browseOffset, browseOffset + PAGE_SIZE);
+
+        el.innerHTML = `
+    <div class="search-wrap">
+      <input class="search-box" placeholder="搜尋文法、中文意思、例句..." oninput="searchQ=this.value;browseOffset=0;renderBrowse()" value="${searchQ.replace(/"/g, "&quot;")}">
+      ${searchQ ? `<button class="search-clear" onclick="searchQ='';browseOffset=0;renderBrowse()">✕</button>` : ""}
+    </div>
+    <div class="filter-row">
+      <select class="select-sm" onchange="filterMem=this.value;browseOffset=0;renderBrowse()">
+        <option value="all" ${filterMem === "all" ? "selected" : ""}>全部</option>
+        <option value="no" ${filterMem === "no" ? "selected" : ""}>未記住</option>
+        <option value="yes" ${filterMem === "yes" ? "selected" : ""}>已記住</option>
+      </select>
+      <select class="select-sm" onchange="sortBy=this.value;browseOffset=0;renderBrowse()">
+        <option value="id" ${sortBy === "id" ? "selected" : ""}>預設排序</option>
+        <option value="cycle_asc" ${sortBy === "cycle_asc" ? "selected" : ""}>週期：低→高</option>
+        <option value="cycle_desc" ${sortBy === "cycle_desc" ? "selected" : ""}>週期：高→低</option>
+      </select>
+      <span class="filter-count">共 ${filtered.length} 個文法</span>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="grammar-list">
+        ${slice
+          .map((g) => {
+            const cycle = MemoryState.getCycle(g.id, cycles);
+            return `
+          <div class="grammar-item" onclick="activeDetail=${g.id};renderBrowse()">
+            <div>
+              <div class="grammar-item-name">${esc(g.grammar)}</div>
+              <div class="grammar-item-meaning">${esc(g.meaning)}</div>
+            </div>
+            ${cycle > 0 ? `<span class="mem-badge">週期 ${cycle}</span>` : ""}
+          </div>`;
+          })
+          .join("")}
+      </div>
+    </div>
+    ${totalPages > 1 ? renderPager(page, totalPages, filtered.length) : ""}
+  `;
+      }
+
+      function renderPager(page, total, count) {
+        const start = page * PAGE_SIZE + 1;
+        const end = Math.min((page + 1) * PAGE_SIZE, count);
+        let btns = "";
+        for (let i = 0; i < total; i++) {
+          btns += `<button class="pager-btn ${i === page ? "active" : ""}" onclick="browseOffset=${i * PAGE_SIZE};renderBrowse()">${i + 1}</button>`;
+        }
+        return `<div class="pager"><span class="pager-info">${start}–${end} / ${count}</span>${btns}</div>`;
+      }
+
+      function showDetail(id) {
+        const g = GRAMMAR_DB.find((x) => x.id === id);
+        if (!g) return;
+        const cycle = MemoryState.getCycle(id, cycles);
+        document.getElementById("tab-content").innerHTML = `
+    <button class="btn btn-ghost" onclick="activeDetail=null;renderBrowse()">← 返回列表</button>
+    <div class="card" style="margin-top:.75rem">
+      <div class="section-label">文法</div>
+      <div class="grammar-title">${esc(g.grammar)}</div>
+      <div class="meaning">${esc(g.meaning)}</div>
+      <div class="tags">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
+      ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
+      ${g.page ? `<div style="margin-top:.75rem;font-size:var(--font-xs);color:var(--color-text-muted)">文法比較辭典 p.${g.page}</div>` : ""}
+    </div>
+    <div class="card">
+      <div class="section-label">例句</div>
+      <div class="example-jp">${esc(g.example_jp)}</div>
+      ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+    </div>
+    <div style="display:flex;gap:var(--space-md);margin-top:1rem;flex-wrap:wrap">
+      ${cycle > 0 ? `<button class="btn" onclick="forgetGrammar(${id})">忘記（- 週期）</button>` : ""}
+      <button class="btn btn-primary" onclick="memorizeGrammar(${id})">記住（+ 週期）</button>
+      ${cycle > 0 ? `<span style="font-size:var(--font-sm);color:var(--color-text-secondary);display:flex;align-items:center;margin-left:var(--space-md)">目前週期：<strong style="margin-left:var(--space-sm);color:var(--color-primary-500)">${cycle}</strong></span>` : ""}
+    </div>
+  `;
+      }
+
+      function memorizeGrammar(id) {
+        cycles = MemoryState.incrementCycle(id, cycles);
+        saveCycles();
+        updateProgress();
+        showDetail(id);
+      }
+
+      function forgetGrammar(id) {
+        cycles = MemoryState.decrementCycle(id, cycles);
+        saveCycles();
+        updateProgress();
+        showDetail(id);
+      }
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      updateProgress();
+      renderBrowse();
+    </script>
+  </body>
+</html>

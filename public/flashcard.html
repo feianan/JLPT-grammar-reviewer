@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLPT N2 文法複習 - 閃卡</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../src/grammar-data.js"></script>
+    <script src="../src/compare-pairs.js"></script>
+    <script src="../src/shared-state.js"></script>
+    <script src="../src/header-nav.js"></script>
+    <script>
+      let cycles = MemoryState.load();
+      let fcIndex = 0;
+      let fcFlipped = false;
+      let fcPool = [];
+      let currentLowestCycle = 0;
+
+      initHeaderNav("flashcard");
+      updateProgress();
+
+      function saveCycles() {
+        MemoryState.save(cycles);
+      }
+
+      function shuffleArray(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      function renderFlashcard(reshuffle = false) {
+        // Get items at the lowest cycle
+        const lowestCycleItems = MemoryState.getLowestCycleItems(
+          GRAMMAR_DB,
+          cycles,
+        );
+
+        if (reshuffle || fcPool.length !== lowestCycleItems.length) {
+          fcPool = shuffleArray(lowestCycleItems);
+          fcIndex = 0;
+          currentLowestCycle =
+            lowestCycleItems.length > 0
+              ? MemoryState.getCycle(lowestCycleItems[0].id, cycles)
+              : 0;
+        }
+
+        if (fcIndex >= fcPool.length) {
+          // Finished current cycle, refresh pool
+          fcPool = shuffleArray(
+            MemoryState.getLowestCycleItems(GRAMMAR_DB, cycles),
+          );
+          fcIndex = 0;
+          currentLowestCycle =
+            fcPool.length > 0 ? MemoryState.getCycle(fcPool[0].id, cycles) : 0;
+        }
+
+        const pool = fcPool;
+        const g = pool[fcIndex];
+        const cycle = MemoryState.getCycle(g.id, cycles);
+        fcFlipped = false;
+
+        document.getElementById("tab-content").innerHTML = `
+    <div class="fc-card">
+      <div class="section-label" style="margin-bottom:.5rem">這個文法的意思是？</div>
+      <div style="font-size:var(--font-3xl);font-weight:700;color:var(--color-text-primary);margin:1rem 0;letter-spacing:.02em">${esc(g.grammar)}</div>
+      <div class="tags" style="justify-content:center">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
+      <div class="fc-body">
+        <div class="fc-answer" id="fc-reveal">
+          <hr class="fc-divider">
+          <div class="meaning" style="font-size:var(--font-xl);text-align:center">${esc(g.meaning)}</div>
+          <div style="margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto">
+            <div class="example-jp">${esc(g.example_jp)}</div>
+            ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+            ${g.supplement ? `<div style="font-size:var(--font-xs);color:var(--color-text-muted);margin-top:.75rem">${esc(g.supplement)}</div>` : ""}
+          </div>
+        </div>
+        <div class="fc-btn-wrap" id="fc-hint">
+          <button class="btn" onclick="flipCard()">查看答案</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:.75rem;margin-top:.25rem">
+      <button class="btn" onclick="fcForget(${g.id})">我忘了</button>
+      <button class="btn btn-primary" onclick="fcMemorize(${g.id})">我記得</button>
+    </div>
+    <div style="text-align:center;margin-top:.75rem;font-size:var(--font-xs);color:var(--color-text-muted)">${fcIndex + 1} / ${pool.length}（隨機順序）</div>
+  `;
+      }
+
+      function flipCard() {
+        const reveal = document.getElementById("fc-reveal");
+        const hint = document.getElementById("fc-hint");
+        if (!reveal) return;
+        fcFlipped = true;
+        reveal.classList.add("open");
+        if (hint) hint.classList.add("hidden");
+      }
+
+      function fcMemorize(id) {
+        cycles = MemoryState.incrementCycle(id, cycles);
+        saveCycles();
+        updateProgress();
+        fcIndex++;
+        renderFlashcard();
+      }
+
+      function fcForget(id) {
+        cycles = MemoryState.decrementCycle(id, cycles);
+        saveCycles();
+        updateProgress();
+        fcIndex++;
+        renderFlashcard();
+      }
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      updateProgress();
+      renderFlashcard(true);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLPT N2 文法複習 - 語氣比較</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../src/grammar-data.js"></script>
+    <script src="../src/compare-pairs.js"></script>
+    <script src="../src/shared-state.js"></script>
+    <script src="../src/header-nav.js"></script>
+    <script>
+      let cycles = MemoryState.load();
+      let cmpIdx = 0;
+
+      initHeaderNav("compare");
+      updateProgress();
+
+      function renderCompare() {
+        const tabContent = document.getElementById("tab-content");
+        tabContent.innerHTML = `
+        <div
+          style="
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+          "
+        >
+          <span style="font-size: var(--font-sm); color: var(--color-text-secondary); font-weight: 500"
+            >比較主題：</span
+          >
+          <select
+            class="select-input"
+            id="cmp-sel"
+            onchange="
+              cmpIdx = parseInt(this.value);
+              renderCompareDetail();
+            "
+          ></select>
+        </div>
+        <div id="cmp-detail"></div>
+      `;
+        const sel = document.getElementById("cmp-sel");
+        sel.innerHTML = COMPARE_PAIRS.map(
+          (p, i) =>
+            `<option value="${i}" ${i === cmpIdx ? "selected" : ""}>${p.label}</option>`,
+        ).join("");
+        renderCompareDetail();
+      }
+
+      function renderCompareDetail() {
+        const pair = COMPARE_PAIRS[cmpIdx];
+        const el = document.getElementById("cmp-detail");
+        el.innerHTML = `
+    <div class="grid2">
+      ${pair.items
+        .map((item) => {
+          const g = GRAMMAR_DB.find((x) => x.grammar === item.grammar) || {};
+          return `<div class="compare-card">
+          <div style="font-size:var(--font-sm);font-weight:700;color:var(--color-text-primary);margin-bottom:var(--space-sm)">${esc(item.grammar)}</div>
+          <div style="font-size:var(--font-xs);color:var(--color-primary-500);margin-bottom:.5rem">${esc(g.meaning || "")}</div>
+          <div class="nuance-box">${esc(item.nuance)}</div>
+          ${g.example_jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:var(--font-sm)">${esc(g.example_jp)}</div>${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}</div>` : ""}
+        </div>`;
+        })
+        .join("")}
+    </div>
+  `;
+      }
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      updateProgress();
+      renderCompare();
+    </script>
+  </body>
+</html>
