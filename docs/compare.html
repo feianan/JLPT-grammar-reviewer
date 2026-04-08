@@ -8,10 +8,10 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="../src/grammar-data.js"></script>
-    <script src="../src/compare-pairs.js"></script>
-    <script src="../src/shared-state.js"></script>
-    <script src="../src/header-nav.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/grammar-data.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/compare-pairs.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/shared-state.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/header-nav.js"></script>
     <script>
       let cycles = MemoryState.load();
       let cmpIdx = 0;
@@ -65,7 +65,7 @@
           <div style="font-size:var(--font-sm);font-weight:700;color:var(--color-text-primary);margin-bottom:var(--space-sm)">${esc(item.grammar)}</div>
           <div style="font-size:var(--font-xs);color:var(--color-primary-500);margin-bottom:.5rem">${esc(g.meaning || "")}</div>
           <div class="nuance-box">${esc(item.nuance)}</div>
-          ${g.example_jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:var(--font-sm)">${esc(g.example_jp)}</div>${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}</div>` : ""}
+          ${g.examples[0]?.jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:var(--font-sm)">${esc(g.examples[0].jp)}</div>${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}</div>` : ""}
         </div>`;
         })
         .join("")}

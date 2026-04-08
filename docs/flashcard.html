@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JLPT N2 文法複習 - 閃卡</title>
+    <title>JLPT N2 文法複習 - 單字卡</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="app"></div>
-    <script src="../src/grammar-data.js"></script>
-    <script src="../src/compare-pairs.js"></script>
-    <script src="../src/shared-state.js"></script>
-    <script src="../src/header-nav.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/grammar-data.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/compare-pairs.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/shared-state.js"></script>
+    <script src="/JLPT-grammar-reviewer/src/header-nav.js"></script>
     <script>
       let cycles = MemoryState.load();
       let fcIndex = 0;
@@ -76,8 +76,8 @@
           <hr class="fc-divider">
           <div class="meaning" style="font-size:var(--font-xl);text-align:center">${esc(g.meaning)}</div>
           <div style="margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto">
-            <div class="example-jp">${esc(g.example_jp)}</div>
-            ${g.example_zh ? `<div class="example-zh">${esc(g.example_zh)}</div>` : ""}
+            <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
+            ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
             ${g.supplement ? `<div style="font-size:var(--font-xs);color:var(--color-text-muted);margin-top:.75rem">${esc(g.supplement)}</div>` : ""}
           </div>
         </div>

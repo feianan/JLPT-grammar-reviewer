@@ -2,7 +2,7 @@
 function initHeaderNav(currentPage) {
   const navItems = [
     { href: "index.html", icon: "📚", label: "瀏覽", id: "browse" },
-    { href: "flashcard.html", icon: "🃏", label: "閃卡", id: "flashcard" },
+    { href: "flashcard.html", icon: "🃏", label: "單字卡", id: "flashcard" },
     { href: "compare.html", icon: "⚖️", label: "語氣比較", id: "compare" },
     { href: "quiz.html", icon: "✏️", label: "翻譯挑戰", id: "quiz" },
   ];
@@ -42,7 +42,8 @@ function updateProgress() {
   if (badgeEl) {
     const cycleLabel =
       completion.cycle === 0 ? "週期 0" : `週期 ${completion.cycle}`;
-    badgeEl.textContent = `${cycleLabel}: ${completion.remaining}／${completion.total}`;
+    const completed = completion.total - completion.remaining;
+    badgeEl.textContent = `${cycleLabel}: ${completed}／${completion.total}`;
   }
 }
 
