@@ -16,7 +16,7 @@
       const PAGE_SIZE = 30;
       let cycles = MemoryState.load();
       let searchQ = "";
-      let sortBy = "id"; // id, cycle_asc, cycle_desc
+      let sortBy = "kana_asc"; // kana_asc, kana_desc, cycle_asc, cycle_desc
       let browseOffset = 0;
       let activeDetail = null;
 
@@ -34,28 +34,27 @@
             !q ||
             g.grammar.includes(q) ||
             g.meaning.includes(q) ||
-            (g.examples[0]?.zh || "").includes(q) ||
-            (g.examples[0]?.jp || "").includes(q);
+            (g.examples[0]?.zh || "").includes(q);
           return matchQ;
         });
 
         // Sort
-        if (sortBy === "kana") {
-          filtered.sort((a, b) =>
-            a.grammar.localeCompare(b.grammar, "ja"),
-          );
+        if (sortBy === "kana_asc") {
+          filtered.sort((a, b) => a.grammar.localeCompare(b.grammar, "ja"));
+        } else if (sortBy === "kana_desc") {
+          filtered.sort((a, b) => b.grammar.localeCompare(a.grammar, "ja"));
         } else if (sortBy === "cycle_asc") {
-          filtered.sort((a, b) => {
-            const cycleA = MemoryState.getCycle(a.id, cycles);
-            const cycleB = MemoryState.getCycle(b.id, cycles);
-            return cycleA - cycleB;
-          });
+          filtered.sort(
+            (a, b) =>
+              MemoryState.getCycle(a.id, cycles) -
+              MemoryState.getCycle(b.id, cycles),
+          );
         } else if (sortBy === "cycle_desc") {
-          filtered.sort((a, b) => {
-            const cycleA = MemoryState.getCycle(a.id, cycles);
-            const cycleB = MemoryState.getCycle(b.id, cycles);
-            return cycleB - cycleA;
-          });
+          filtered.sort(
+            (a, b) =>
+              MemoryState.getCycle(b.id, cycles) -
+              MemoryState.getCycle(a.id, cycles),
+          );
         }
 
         return filtered;
@@ -70,24 +69,23 @@
         if (!document.getElementById("browse-list")) {
           document.getElementById("tab-content").innerHTML = `
     <div class="search-wrap">
-      <input id="browse-search" class="search-box" placeholder="搜尋文法、中文意思、例句..."
+      <input id="browse-search" class="search-box" placeholder="搜尋文法、中文意思..."
         oninput="searchQ=this.value;browseOffset=0;renderList()">
       <button id="browse-clear" class="search-clear" style="display:none"
         onclick="searchQ='';browseOffset=0;document.getElementById('browse-search').value='';renderList()">✕</button>
     </div>
     <div class="filter-row">
-      <select id="browse-sort" class="select-sm" onchange="sortBy=this.value;browseOffset=0;renderList()">
-        <option value="id">預設排序</option>
-        <option value="kana">日文字母順</option>
-        <option value="cycle_asc">週期：低→高</option>
-        <option value="cycle_desc">週期：高→低</option>
-      </select>
+      <div class="sort-tabs" id="browse-sort-tabs">
+        <button class="sort-tab" data-sort="kana_asc" onclick="sortBy='kana_asc';browseOffset=0;renderList()">日文字母 ↑</button>
+        <button class="sort-tab" data-sort="kana_desc" onclick="sortBy='kana_desc';browseOffset=0;renderList()">日文字母 ↓</button>
+        <button class="sort-tab" data-sort="cycle_asc" onclick="sortBy='cycle_asc';browseOffset=0;renderList()">週期 ↑</button>
+        <button class="sort-tab" data-sort="cycle_desc" onclick="sortBy='cycle_desc';browseOffset=0;renderList()">週期 ↓</button>
+      </div>
       <span id="browse-count" class="filter-count"></span>
     </div>
     <div id="browse-list"></div>
   `;
           document.getElementById("browse-search").value = searchQ;
-          document.getElementById("browse-sort").value = sortBy;
         }
         renderList();
       }
@@ -98,7 +96,13 @@
         const page = Math.floor(browseOffset / PAGE_SIZE);
         const slice = filtered.slice(browseOffset, browseOffset + PAGE_SIZE);
 
-        document.getElementById("browse-count").textContent = `共 ${filtered.length} 個文法`;
+        document.getElementById("browse-count").textContent =
+          `共 ${filtered.length} 個文法`;
+        document
+          .querySelectorAll("#browse-sort-tabs .sort-tab")
+          .forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.sort === sortBy);
+          });
         const clearBtn = document.getElementById("browse-clear");
         if (clearBtn) clearBtn.style.display = searchQ ? "" : "none";
 
