@@ -24,23 +24,23 @@
         if (!quizState) {
           el.innerHTML = `
       <div class="card" style="text-align:center;padding:2.5rem 1.5rem">
-        <div style="font-size:var(--font-lg);font-weight:700;color:var(--color-text-primary);margin-bottom:.5rem">翻譯挑戰</div>
-        <div style="font-size:var(--font-sm);color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.8">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法<br><br>
+        <div style="font-size:var(--font-xl);font-weight:700;color:var(--color-text-primary);margin-bottom:.5rem">翻譯挑戰</div>
+        <div style="font-size:var(--font-base);color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.8">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法<br><br>
           <label style="font-size:var(--font-xs);color:var(--color-text-secondary)"><input type="checkbox" id="quiz-unmem-only" style="margin-right:var(--space-sm)">只出未記住的文法（週期 0）</label>
         </div>
-        <button class="btn btn-primary" onclick="startQuiz()" style="padding:var(--space-md) var(--space-2xl);font-size:var(--font-sm)">開始測驗</button>
+        <button class="btn btn-primary" onclick="startQuiz()" style="padding:var(--space-md) var(--space-2xl);font-size:var(--font-base)">開始測驗</button>
       </div>`;
           return;
         }
         const { q, opts, answered, score, total, mode } = quizState;
         el.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-      <span style="font-size:var(--font-sm);color:var(--color-text-secondary)">得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <span style="font-size:var(--font-base);color:var(--color-text-secondary)">得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
       <button class="btn btn-sm" onclick="quizState=null;renderQuiz()">結束</button>
     </div>
     <div class="card">
       <div class="section-label" style="margin-bottom:.75rem">${mode === "zh" ? "這個例句的正確中文意思是？" : "這個中文意思對應的日文文法是？"}</div>
-      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-lg)"};color:var(--color-text-primary);line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
+      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-xl)"};color:var(--color-text-primary);line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
       <div>
         ${opts
           .map((opt, i) => {
