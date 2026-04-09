@@ -78,7 +78,8 @@
           <div style="margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto">
             <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
             ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
-            ${g.supplement ? `<div style="font-size:var(--font-xs);color:var(--color-text-muted);margin-top:.75rem">${esc(g.supplement)}</div>` : ""}
+            ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
+            ${g.url ? `<div style="margin-top:1rem;text-align:center"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
           </div>
         </div>
         <div class="fc-btn-wrap" id="fc-hint">

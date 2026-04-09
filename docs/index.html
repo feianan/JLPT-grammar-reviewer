@@ -16,8 +16,7 @@
       const PAGE_SIZE = 30;
       let cycles = MemoryState.load();
       let searchQ = "";
-      let filterMem = "all";
-      let sortBy = "id"; // id, cycle_asc, cycle_desc
+      let sortBy = "kana_asc"; // kana_asc, kana_desc, cycle_asc, cycle_desc
       let browseOffset = 0;
       let activeDetail = null;
 
@@ -35,29 +34,27 @@
             !q ||
             g.grammar.includes(q) ||
             g.meaning.includes(q) ||
-            (g.examples[0]?.zh || "").includes(q) ||
-            (g.examples[0]?.jp || "").includes(q);
-          const cycle = MemoryState.getCycle(g.id, cycles);
-          const matchMem =
-            filterMem === "all" ||
-            (filterMem === "yes" && cycle > 0) ||
-            (filterMem === "no" && cycle === 0);
-          return matchQ && matchMem;
+            (g.examples[0]?.zh || "").includes(q);
+          return matchQ;
         });
 
-        // Sort by cycle
-        if (sortBy === "cycle_asc") {
-          filtered.sort((a, b) => {
-            const cycleA = MemoryState.getCycle(a.id, cycles);
-            const cycleB = MemoryState.getCycle(b.id, cycles);
-            return cycleA - cycleB;
-          });
+        // Sort
+        if (sortBy === "kana_asc") {
+          filtered.sort((a, b) => a.grammar.localeCompare(b.grammar, "ja"));
+        } else if (sortBy === "kana_desc") {
+          filtered.sort((a, b) => b.grammar.localeCompare(a.grammar, "ja"));
+        } else if (sortBy === "cycle_asc") {
+          filtered.sort(
+            (a, b) =>
+              MemoryState.getCycle(a.id, cycles) -
+              MemoryState.getCycle(b.id, cycles),
+          );
         } else if (sortBy === "cycle_desc") {
-          filtered.sort((a, b) => {
-            const cycleA = MemoryState.getCycle(a.id, cycles);
-            const cycleB = MemoryState.getCycle(b.id, cycles);
-            return cycleB - cycleA;
-          });
+          filtered.sort(
+            (a, b) =>
+              MemoryState.getCycle(b.id, cycles) -
+              MemoryState.getCycle(a.id, cycles),
+          );
         }
 
         return filtered;
@@ -68,30 +65,48 @@
           showDetail(activeDetail);
           return;
         }
-        const el = document.getElementById("tab-content");
+        // Only build the shell (search bar + controls) if not already present
+        if (!document.getElementById("browse-list")) {
+          document.getElementById("tab-content").innerHTML = `
+    <div class="search-wrap">
+      <input id="browse-search" class="search-box" placeholder="搜尋文法、中文意思..."
+        oninput="searchQ=this.value;browseOffset=0;renderList()">
+      <button id="browse-clear" class="search-clear" style="display:none"
+        onclick="searchQ='';browseOffset=0;document.getElementById('browse-search').value='';renderList()">✕</button>
+    </div>
+    <div class="filter-row">
+      <div class="sort-tabs" id="browse-sort-tabs">
+        <button class="sort-tab" data-sort="kana_asc" onclick="sortBy='kana_asc';browseOffset=0;renderList()">日文字母 ↑</button>
+        <button class="sort-tab" data-sort="kana_desc" onclick="sortBy='kana_desc';browseOffset=0;renderList()">日文字母 ↓</button>
+        <button class="sort-tab" data-sort="cycle_asc" onclick="sortBy='cycle_asc';browseOffset=0;renderList()">週期 ↑</button>
+        <button class="sort-tab" data-sort="cycle_desc" onclick="sortBy='cycle_desc';browseOffset=0;renderList()">週期 ↓</button>
+      </div>
+      <span id="browse-count" class="filter-count"></span>
+    </div>
+    <div id="browse-list"></div>
+  `;
+          document.getElementById("browse-search").value = searchQ;
+        }
+        renderList();
+      }
+
+      function renderList() {
         const filtered = getFiltered();
         const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
         const page = Math.floor(browseOffset / PAGE_SIZE);
         const slice = filtered.slice(browseOffset, browseOffset + PAGE_SIZE);
 
-        el.innerHTML = `
-    <div class="search-wrap">
-      <input class="search-box" placeholder="搜尋文法、中文意思、例句..." oninput="searchQ=this.value;browseOffset=0;renderBrowse()" value="${searchQ.replace(/"/g, "&quot;")}">
-      ${searchQ ? `<button class="search-clear" onclick="searchQ='';browseOffset=0;renderBrowse()">✕</button>` : ""}
-    </div>
-    <div class="filter-row">
-      <select class="select-sm" onchange="filterMem=this.value;browseOffset=0;renderBrowse()">
-        <option value="all" ${filterMem === "all" ? "selected" : ""}>全部</option>
-        <option value="no" ${filterMem === "no" ? "selected" : ""}>未記住</option>
-        <option value="yes" ${filterMem === "yes" ? "selected" : ""}>已記住</option>
-      </select>
-      <select class="select-sm" onchange="sortBy=this.value;browseOffset=0;renderBrowse()">
-        <option value="id" ${sortBy === "id" ? "selected" : ""}>預設排序</option>
-        <option value="cycle_asc" ${sortBy === "cycle_asc" ? "selected" : ""}>週期：低→高</option>
-        <option value="cycle_desc" ${sortBy === "cycle_desc" ? "selected" : ""}>週期：高→低</option>
-      </select>
-      <span class="filter-count">共 ${filtered.length} 個文法</span>
-    </div>
+        document.getElementById("browse-count").textContent =
+          `共 ${filtered.length} 個文法`;
+        document
+          .querySelectorAll("#browse-sort-tabs .sort-tab")
+          .forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.sort === sortBy);
+          });
+        const clearBtn = document.getElementById("browse-clear");
+        if (clearBtn) clearBtn.style.display = searchQ ? "" : "none";
+
+        document.getElementById("browse-list").innerHTML = `
     <div class="card" style="padding:0;overflow:hidden">
       <div class="grammar-list">
         ${slice
@@ -145,7 +160,7 @@
     <div style="display:flex;gap:var(--space-md);margin-top:1rem;flex-wrap:wrap">
       ${cycle > 0 ? `<button class="btn" onclick="forgetGrammar(${id})">忘記（- 週期）</button>` : ""}
       <button class="btn btn-primary" onclick="memorizeGrammar(${id})">記住（+ 週期）</button>
-      ${cycle > 0 ? `<span style="font-size:var(--font-sm);color:var(--color-text-secondary);display:flex;align-items:center;margin-left:var(--space-md)">目前週期：<strong style="margin-left:var(--space-sm);color:var(--color-primary-500)">${cycle}</strong></span>` : ""}
+      ${cycle > 0 ? `<span style="font-size:var(--font-base);color:var(--color-text-secondary);display:flex;align-items:center;margin-left:var(--space-md)">目前週期：<strong style="margin-left:var(--space-sm);color:var(--color-primary-500)">${cycle}</strong></span>` : ""}
     </div>
   `;
       }
