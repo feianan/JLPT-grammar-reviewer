@@ -2733,7 +2733,7 @@ const GRAMMAR_DB = [
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/79",
     examples: [
       {
-        jp: "事件に関しての情報。（＝事件に関する情報）",
+        jp: "事件に関しての情報。",
         zh: "跟事件有關的情報。",
       },
     ],

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JLPT N2 文法複習 - 翻譯挑戰</title>
+    <title>JLPT N2 文法複習 - 翻譯測試</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -23,43 +23,59 @@
         const el = document.getElementById("tab-content");
         if (!quizState) {
           el.innerHTML = `
-      <div class="card" style="text-align:center;padding:2.5rem 1.5rem">
-        <div style="font-size:var(--font-xl);font-weight:700;color:var(--color-text-primary);margin-bottom:.5rem">翻譯挑戰</div>
-        <div style="font-size:var(--font-base);color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:var(--line-height-relaxed)">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法</div>
-        <button class="btn btn-primary" onclick="startQuiz()" style="padding:var(--space-md) var(--space-2xl);font-size:var(--font-base)">開始測驗</button>
+      <div class="card start-card">
+        <div class="start-title">翻譯測試</div>
+        <div class="start-description">隨機出題：看日文例句，選出正確的中文意思</div>
+        <button class="btn btn-primary" onclick="startQuiz()">開始測驗</button>
       </div>`;
           return;
         }
-        const { q, opts, answered, score, total, mode } = quizState;
+        if (quizState.ended) {
+          renderReport();
+          return;
+        }
+        const { q, opts, answered, score, total } = quizState;
+        const correctIndex = opts.findIndex((o) => o.id === q.id);
+        const isCorrect = answered !== null && answered === correctIndex;
         el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-      <span style="font-size:var(--font-base);color:var(--color-text-secondary)">得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
-      <button class="btn btn-sm" onclick="quizState=null;renderQuiz()">結束</button>
+    <div class="session-header">
+      <span>得分 ${score}／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <button class="btn" onclick="endQuiz()">結束</button>
     </div>
     <div class="card">
-      <div class="section-label" style="margin-bottom:.75rem">${mode === "zh" ? "這個例句的正確中文意思是？" : "這個中文意思對應的日文文法是？"}</div>
-      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-xl)"};color:var(--color-text-primary);line-height:var(--line-height-relaxed);margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
+      <div class="section-label">這個例句的正確中文意思是？</div>
+      <div class="question-prompt jp">${esc(q.examples[0]?.jp || q.grammar)}</div>
       <div>
         ${opts
           .map((opt, i) => {
-            let cls = "quiz-option";
+            let cls = "answer-option";
             if (answered !== null) {
               if (opt.id === q.id) cls += " correct";
               else if (i === answered && opt.id !== q.id) cls += " wrong";
             }
-            return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered !== null ? "disabled" : ""}>${esc(mode === "zh" ? opt.meaning : opt.grammar)}</button>`;
+            return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered !== null ? "disabled" : ""}>${esc(opt.examples[0]?.zh || opt.meaning)}</button>`;
           })
           .join("")}
       </div>
       ${
         answered !== null
           ? `
-        <div class="result-box">
-          ${answered === opts.findIndex((o) => o.id === q.id) ? "✓ 正確！" : "✗ 答錯了。"}<br>
-          <strong>${esc(q.grammar)}</strong>　${esc(q.meaning)}<br>
-          ${q.examples[0]?.jp ? `<span style="font-size:var(--font-xs);color:var(--color-text-secondary)">${esc(q.examples[0].jp)}　${esc(q.examples[0]?.zh || "")}</span>` : ""}
+        <div class="answer-feedback">
+          <div class="answer-bar">
+            <span class="answer-result-text" style="color:${isCorrect ? "var(--color-success-700)" : "var(--color-error-700)"}">
+              ${isCorrect ? "答對ㄌ！好讚" : "答錯了 QQ"}
+            </span>
+            <button class="btn btn-primary" onclick="nextQuiz()">下一題 →</button>
+          </div>
+          <div class="answer-detail">
+            <div class="detail-grammar">${esc(q.grammar)}</div>
+            <div class="meaning">${esc(q.meaning)}</div>
+            ${q.examples[0]?.jp ? `<div class="example-jp">${esc(q.examples[0].jp)}</div>` : ""}
+            ${q.examples[0]?.zh ? `<div class="example-zh">${esc(q.examples[0].zh)}</div>` : ""}
+            ${q.supplement ? `<div class="supplement">${esc(q.supplement)}</div>` : ""}
+            ${q.url ? `<div style="margin-top:var(--space-xl)"><a href="${q.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+          </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:1rem" onclick="nextQuiz()">下一題 →</button>
       `
           : ""
       }
@@ -74,25 +90,60 @@
           answered: null,
           score: 0,
           total: 0,
-          mode: "zh",
+          history: [],
+          ended: false,
         };
         nextQuiz();
       }
 
+      function endQuiz() {
+        quizState = { ...quizState, ended: true };
+        renderQuiz();
+      }
+
+      function renderReport() {
+        const { history, score, total } = quizState;
+        const el = document.getElementById("tab-content");
+        el.innerHTML = `
+    <div class="session-header">
+      <span>得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="grammar-list">
+        ${[...history]
+          .sort((a, b) => a.correct - b.correct)
+          .map(
+            ({ q, correct }) => `
+          <div class="grammar-item">
+            <div>
+              <div class="grammar-item-name">${esc(q.grammar)}</div>
+              <div class="grammar-item-meaning">${esc(q.meaning)}</div>
+            </div>
+            <span class="result-badge ${correct ? "correct" : "wrong"}">${correct ? "答對" : "答錯"}</span>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:1rem">
+      <button class="btn btn-primary" onclick="startQuiz()">開始新測試</button>
+    </div>
+  `;
+      }
+
       function nextQuiz() {
-        const pool = GRAMMAR_DB;
-        if (!pool.length) {
+        if (!GRAMMAR_DB.length) {
           quizState = null;
           renderQuiz();
           return;
         }
-        const q = pool[Math.floor(Math.random() * pool.length)];
+        const q = GRAMMAR_DB[Math.floor(Math.random() * GRAMMAR_DB.length)];
         const wrong = GRAMMAR_DB.filter((x) => x.id !== q.id)
           .sort(() => Math.random() - 0.5)
           .slice(0, 3);
         const opts = [q, ...wrong].sort(() => Math.random() - 0.5);
-        const mode = Math.random() < 0.5 ? "zh" : "jp";
-        quizState = { ...quizState, q, opts, answered: null, mode };
+        quizState = { ...quizState, q, opts, answered: null };
         renderQuiz();
       }
 
@@ -103,6 +154,7 @@
           answered: i,
           score: quizState.score + (right ? 1 : 0),
           total: quizState.total + 1,
+          history: [...quizState.history, { q: quizState.q, correct: right }],
         };
         renderQuiz();
       }
