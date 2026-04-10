@@ -25,9 +25,7 @@
           el.innerHTML = `
       <div class="card" style="text-align:center;padding:2.5rem 1.5rem">
         <div style="font-size:var(--font-xl);font-weight:700;color:var(--color-text-primary);margin-bottom:.5rem">翻譯挑戰</div>
-        <div style="font-size:var(--font-base);color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.8">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法<br><br>
-          <label style="font-size:var(--font-xs);color:var(--color-text-secondary)"><input type="checkbox" id="quiz-unmem-only" style="margin-right:var(--space-sm)">只出未記住的文法（週期 0）</label>
-        </div>
+        <div style="font-size:var(--font-base);color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:var(--line-height-relaxed)">隨機出題：看日文例句選中文意思<br>或看中文意思選正確日文文法</div>
         <button class="btn btn-primary" onclick="startQuiz()" style="padding:var(--space-md) var(--space-2xl);font-size:var(--font-base)">開始測驗</button>
       </div>`;
           return;
@@ -40,7 +38,7 @@
     </div>
     <div class="card">
       <div class="section-label" style="margin-bottom:.75rem">${mode === "zh" ? "這個例句的正確中文意思是？" : "這個中文意思對應的日文文法是？"}</div>
-      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-xl)"};color:var(--color-text-primary);line-height:1.9;margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
+      <div style="font-size:${mode === "zh" ? "var(--font-base)" : "var(--font-xl)"};color:var(--color-text-primary);line-height:var(--line-height-relaxed);margin-bottom:1rem;font-weight:${mode === "zh" ? "400" : "700"}">${esc(mode === "zh" ? q.examples[0]?.jp || q.meaning : q.meaning)}</div>
       <div>
         ${opts
           .map((opt, i) => {
@@ -70,7 +68,6 @@
       }
 
       function startQuiz() {
-        const unmeOnly = document.getElementById("quiz-unmem-only")?.checked;
         quizState = {
           q: null,
           opts: [],
@@ -78,15 +75,12 @@
           score: 0,
           total: 0,
           mode: "zh",
-          unmeOnly,
         };
         nextQuiz();
       }
 
       function nextQuiz() {
-        const pool = quizState.unmeOnly
-          ? GRAMMAR_DB.filter((g) => MemoryState.getCycle(g.id, cycles) === 0)
-          : GRAMMAR_DB;
+        const pool = GRAMMAR_DB;
         if (!pool.length) {
           quizState = null;
           renderQuiz();

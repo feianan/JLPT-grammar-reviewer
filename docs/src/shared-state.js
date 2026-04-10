@@ -28,19 +28,6 @@ const MemoryState = {
     return newCycles;
   },
 
-  // Decrement cycle (forget)
-  decrementCycle(id, cycles) {
-    const newCycles = { ...cycles };
-    const current = newCycles[id] || 0;
-    if (current > 0) {
-      newCycles[id] = current - 1;
-      if (newCycles[id] === 0) {
-        delete newCycles[id];
-      }
-    }
-    return newCycles;
-  },
-
   // Get total memorized count (cycle > 0)
   getMemorizedCount(cycles) {
     return Object.keys(cycles).filter((id) => cycles[id] > 0).length;

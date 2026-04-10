@@ -157,26 +157,8 @@
       <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
       ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
     </div>
-    <div style="display:flex;gap:var(--space-md);margin-top:1rem;flex-wrap:wrap">
-      ${cycle > 0 ? `<button class="btn" onclick="forgetGrammar(${id})">忘記（- 週期）</button>` : ""}
-      <button class="btn btn-primary" onclick="memorizeGrammar(${id})">記住（+ 週期）</button>
-      ${cycle > 0 ? `<span style="font-size:var(--font-base);color:var(--color-text-secondary);display:flex;align-items:center;margin-left:var(--space-md)">目前週期：<strong style="margin-left:var(--space-sm);color:var(--color-primary-500)">${cycle}</strong></span>` : ""}
-    </div>
+    ${cycle > 0 ? `<div style="margin-top:1rem;font-size:var(--font-base);color:var(--color-text-secondary)">目前週期：<strong style="color:var(--color-primary-500)">${cycle}</strong></div>` : ""}
   `;
-      }
-
-      function memorizeGrammar(id) {
-        cycles = MemoryState.incrementCycle(id, cycles);
-        saveCycles();
-        updateProgress();
-        showDetail(id);
-      }
-
-      function forgetGrammar(id) {
-        cycles = MemoryState.decrementCycle(id, cycles);
-        saveCycles();
-        updateProgress();
-        showDetail(id);
       }
 
       function esc(s) {

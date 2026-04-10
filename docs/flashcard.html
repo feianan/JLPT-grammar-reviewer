@@ -15,9 +15,10 @@
     <script>
       let cycles = MemoryState.load();
       let fcIndex = 0;
-      let fcFlipped = false;
       let fcPool = [];
       let currentLowestCycle = 0;
+      let fcAnswered = false;
+      let fcCurrentOptions = []; // [{ grammar, correct }, ...]
 
       initHeaderNav("flashcard");
       updateProgress();
@@ -36,7 +37,6 @@
       }
 
       function renderFlashcard(reshuffle = false) {
-        // Get items at the lowest cycle
         const lowestCycleItems = MemoryState.getLowestCycleItems(
           GRAMMAR_DB,
           cycles,
@@ -52,7 +52,6 @@
         }
 
         if (fcIndex >= fcPool.length) {
-          // Finished current cycle, refresh pool
           fcPool = shuffleArray(
             MemoryState.getLowestCycleItems(GRAMMAR_DB, cycles),
           );
@@ -63,59 +62,131 @@
 
         const pool = fcPool;
         const g = pool[fcIndex];
-        const cycle = MemoryState.getCycle(g.id, cycles);
-        fcFlipped = false;
+        fcAnswered = false;
+
+        const wrongItems = shuffleArray(
+          GRAMMAR_DB.filter((x) => x.id !== g.id),
+        ).slice(0, 2);
+        fcCurrentOptions = shuffleArray([
+          { grammar: g, correct: true },
+          { grammar: wrongItems[0], correct: false },
+          { grammar: wrongItems[1], correct: false },
+        ]);
+
+        const optionsHtml = fcCurrentOptions
+          .map(
+            (opt, i) =>
+              `<button class="quiz-option" id="fc-opt-${i}" data-correct="${opt.correct}" data-gid="${opt.grammar.id}" onclick="selectOption(${g.id}, ${opt.correct}, ${i})">${esc(opt.grammar.meaning)}</button>`,
+          )
+          .join("");
 
         document.getElementById("tab-content").innerHTML = `
     <div class="fc-card">
       <div class="section-label" style="margin-bottom:.5rem">這個文法的意思是？</div>
-      <div style="font-size:var(--font-3xl);font-weight:700;color:var(--color-text-primary);margin:1rem 0;letter-spacing:.02em">${esc(g.grammar)}</div>
+      <div style="font-size:var(--font-3xl);font-weight:700;color:var(--color-text-primary);margin:1rem 0">${esc(g.grammar)}</div>
       <div class="tags" style="justify-content:center">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
-      <div class="fc-body">
-        <div class="fc-answer" id="fc-reveal">
-          <hr class="fc-divider">
-          <div class="meaning" style="font-size:var(--font-xl);text-align:center">${esc(g.meaning)}</div>
-          <div style="margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto">
-            <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
-            ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
-            ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
-            ${g.url ? `<div style="margin-top:1rem;text-align:center"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+      <div style="width:100%;margin-top:1.5rem">
+        ${optionsHtml}
+        <div id="fc-feedback" style="display:none;margin-top:1rem">
+          <div id="fc-result-box" style="border-radius:12px;border:1px solid var(--color-border);background:var(--color-neutral-50);padding:1.5rem 1.75rem 2rem">
+            <div style="margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--color-border)">
+              <span id="fc-result-text" style="font-size:var(--font-base);font-weight:700"></span>
+            </div>
+            <div id="fc-detail"></div>
+          </div>
+          <div id="fc-next-hint" style="text-align:center;margin-top:1.5rem;font-size:var(--font-xs);color:var(--color-text-muted)"></div>
+          <div id="fc-next-btn" style="display:none;text-align:center;margin-top:1.5rem">
+            <button class="btn btn-primary" onclick="fcNext()">下一題</button>
           </div>
         </div>
-        <div class="fc-btn-wrap" id="fc-hint">
-          <button class="btn" onclick="flipCard()">查看答案</button>
-        </div>
       </div>
-    </div>
-    <div style="display:flex;justify-content:center;gap:.75rem;margin-top:.25rem">
-      <button class="btn" onclick="fcForget(${g.id})">我忘了</button>
-      <button class="btn btn-primary" onclick="fcMemorize(${g.id})">我記得</button>
     </div>
     <div style="text-align:center;margin-top:.75rem;font-size:var(--font-xs);color:var(--color-text-muted)">${fcIndex + 1} / ${pool.length}（隨機順序）</div>
   `;
       }
 
-      function flipCard() {
-        const reveal = document.getElementById("fc-reveal");
-        const hint = document.getElementById("fc-hint");
-        if (!reveal) return;
-        fcFlipped = true;
-        reveal.classList.add("open");
-        if (hint) hint.classList.add("hidden");
+      function renderDetail(g) {
+        return `
+          <div class="meaning" style="margin-bottom:var(--space-xl)">${esc(g.meaning)}</div>
+          <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
+          ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
+          ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
+          ${g.url ? `<div style="margin-top:var(--space-xl)"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+        `;
       }
 
-      function fcMemorize(id) {
-        cycles = MemoryState.incrementCycle(id, cycles);
-        saveCycles();
-        updateProgress();
-        fcIndex++;
-        renderFlashcard();
+      function showDetail(gid) {
+        const g = GRAMMAR_DB.find((x) => x.id === gid);
+        if (!g) return;
+        document.getElementById("fc-detail").innerHTML = renderDetail(g);
+        // Highlight the active detail tab
+        for (let i = 0; i < 3; i++) {
+          const btn = document.getElementById(`fc-opt-${i}`);
+          if (!btn) continue;
+          btn.style.outline =
+            Number(btn.dataset.gid) === gid
+              ? "2px solid var(--color-neutral-400)"
+              : "none";
+        }
       }
 
-      function fcForget(id) {
-        cycles = MemoryState.decrementCycle(id, cycles);
-        saveCycles();
-        updateProgress();
+      function selectOption(id, isCorrect, optIndex) {
+        if (fcAnswered) return;
+        fcAnswered = true;
+
+        // Apply correct/wrong styles and re-wire clicks to showDetail
+        for (let i = 0; i < 3; i++) {
+          const btn = document.getElementById(`fc-opt-${i}`);
+          if (!btn) continue;
+          const gid = Number(btn.dataset.gid);
+          btn.onclick = () => showDetail(gid);
+          if (btn.dataset.correct === "true") btn.classList.add("correct");
+        }
+        const selectedBtn = document.getElementById(`fc-opt-${optIndex}`);
+        if (selectedBtn && !isCorrect) selectedBtn.classList.add("wrong");
+
+        if (isCorrect) {
+          cycles = MemoryState.incrementCycle(id, cycles);
+          saveCycles();
+          updateProgress();
+        }
+
+        const resultText = document.getElementById("fc-result-text");
+        const feedback = document.getElementById("fc-feedback");
+        const nextHint = document.getElementById("fc-next-hint");
+        if (resultText) {
+          resultText.textContent = isCorrect ? "答對了！週期 +1" : "答錯了";
+          resultText.style.color = isCorrect
+            ? "var(--color-success-700)"
+            : "var(--color-error-700)";
+        }
+        if (feedback) feedback.style.display = "block";
+
+        // Default: show the correct option's detail
+        const correctOption = fcCurrentOptions.find((o) => o.correct);
+        if (correctOption) showDetail(correctOption.grammar.id);
+
+        if (!isCorrect) {
+          const nextBtn = document.getElementById("fc-next-btn");
+          if (nextBtn) nextBtn.style.display = "block";
+        }
+
+        if (isCorrect) {
+          let remaining = 3;
+          if (nextHint) nextHint.textContent = `${remaining} 秒後自動前進…`;
+          const timer = setInterval(() => {
+            remaining--;
+            if (remaining > 0) {
+              if (nextHint) nextHint.textContent = `${remaining} 秒後自動前進…`;
+            } else {
+              clearInterval(timer);
+              fcNext();
+            }
+          }, 1000);
+        }
+      }
+
+      function fcNext() {
         fcIndex++;
         renderFlashcard();
       }
