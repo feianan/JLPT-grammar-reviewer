@@ -34,9 +34,10 @@
           renderReport();
           return;
         }
-        const { q, opts, answered, score, total } = quizState;
+        const { q, opts, answered, score, total, viewingOption } = quizState;
         const correctIndex = opts.findIndex((o) => o.id === q.id);
         const isCorrect = answered !== null && answered === correctIndex;
+        const viewedOpt = answered !== null ? opts[viewingOption] : q;
         el.innerHTML = `
     <div class="session-header">
       <span>得分 ${score}／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
@@ -52,8 +53,9 @@
             if (answered !== null) {
               if (opt.id === q.id) cls += " correct";
               else if (i === answered && opt.id !== q.id) cls += " wrong";
+              if (i === viewingOption) cls += " viewing";
             }
-            return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered !== null ? "disabled" : ""}>${esc(opt.examples[0]?.zh || opt.meaning)}</button>`;
+            return `<button class="${cls}" onclick="${answered !== null ? `viewQuizOption(${i})` : `answerQuiz(${i})`}">${esc(opt.examples[0]?.zh || opt.meaning)}</button>`;
           })
           .join("")}
       </div>
@@ -63,17 +65,17 @@
         <div class="answer-feedback">
           <div class="answer-bar">
             <span class="answer-result-text" style="color:${isCorrect ? "var(--color-success-700)" : "var(--color-error-700)"}">
-              ${isCorrect ? "答對ㄌ！好讚" : "答錯了 QQ"}
+              ${isCorrect ? "✅ 答對ㄌ！" : "❌ 答錯ㄌ QQ"}
             </span>
             <button class="btn btn-primary" onclick="nextQuiz()">下一題 →</button>
           </div>
           <div class="answer-detail">
-            <div class="detail-grammar">${esc(q.grammar)}</div>
-            <div class="meaning">${esc(q.meaning)}</div>
-            ${q.examples[0]?.jp ? `<div class="example-jp">${esc(q.examples[0].jp)}</div>` : ""}
-            ${q.examples[0]?.zh ? `<div class="example-zh">${esc(q.examples[0].zh)}</div>` : ""}
-            ${q.supplement ? `<div class="supplement">${esc(q.supplement)}</div>` : ""}
-            ${q.url ? `<div style="margin-top:var(--space-xl)"><a href="${q.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+            <div class="detail-grammar">${esc(viewedOpt.grammar)}</div>
+            <div class="meaning">${esc(viewedOpt.meaning)}</div>
+            ${viewedOpt.examples[0]?.jp ? `<div class="example-jp">${esc(viewedOpt.examples[0].jp)}</div>` : ""}
+            ${viewedOpt.examples[0]?.zh ? `<div class="example-zh">${esc(viewedOpt.examples[0].zh)}</div>` : ""}
+            ${viewedOpt.supplement ? `<div class="supplement">${esc(viewedOpt.supplement)}</div>` : ""}
+            ${viewedOpt.url ? `<div style="margin-top:var(--space-2xl)"><a href="${viewedOpt.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
           </div>
         </div>
       `
@@ -96,6 +98,11 @@
         nextQuiz();
       }
 
+      function viewQuizOption(i) {
+        quizState = { ...quizState, viewingOption: i };
+        renderQuiz();
+      }
+
       function endQuiz() {
         quizState = { ...quizState, ended: true };
         renderQuiz();
@@ -106,7 +113,7 @@
         const el = document.getElementById("tab-content");
         el.innerHTML = `
     <div class="session-header">
-      <span>得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <span>得分 ${score}／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
     </div>
     <div class="card" style="padding:0;overflow:hidden">
       <div class="grammar-list">
@@ -152,6 +159,7 @@
         quizState = {
           ...quizState,
           answered: i,
+          viewingOption: i,
           score: quizState.score + (right ? 1 : 0),
           total: quizState.total + 1,
           history: [...quizState.history, { q: quizState.q, correct: right }],

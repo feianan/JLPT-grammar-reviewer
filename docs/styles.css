@@ -186,7 +186,7 @@ body {
 }
 .meaning {
   font-size: var(--font-base);
-  color: var(--color-primary-700);
+  color: var(--color-neutral-700);
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
@@ -394,12 +394,11 @@ button {
   flex-shrink: 0;
 }
 .supplement {
-  margin-top: var(--space-2xl);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
   font-size: var(--font-xs);
   color: var(--color-primary-500);
-  padding: 0.75rem 1rem;
-  background: var(--color-white);
-  border-radius: 8px;
   line-height: var(--line-height-normal);
   white-space: pre-wrap;
 }
@@ -432,15 +431,13 @@ button {
 /* answer feedback */
 .answer-feedback {
   margin-top: 1rem;
+  text-align: left;
 }
 .answer-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-  background: var(--color-neutral-50);
+  padding: 0.625rem 0.75rem;
   margin-bottom: 0.75rem;
 }
 .answer-bar .btn {
@@ -455,11 +452,11 @@ button {
   border-radius: 12px;
   border: 1px solid var(--color-border);
   background: var(--color-neutral-50);
-  padding: 1.5rem 1.75rem 2rem;
+  padding: 0.625rem 0.75rem 2rem;
 }
 .detail-grammar {
   font-size: var(--font-base);
-  color: var(--color-primary-700);
+  color: var(--color-neutral-700);
   font-weight: 600;
   margin-bottom: var(--space-xs);
 } /* grid */
@@ -472,6 +469,22 @@ button {
 @media (max-width: 500px) {
   .grid2 {
     grid-template-columns: 1fr;
+  }
+  .question-card {
+    padding: 1rem 0.875rem;
+  }
+  .answer-option {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+  }
+  .answer-detail {
+    padding: 1rem 1rem 1.25rem;
+  }
+  .answer-bar {
+    padding: 0.5rem 0;
+  }
+  .card {
+    padding: 0.875rem;
   }
 }
 .stat {
@@ -552,8 +565,9 @@ button {
   border-color: var(--color-error-500);
   color: var(--color-error-700);
 }
-.answer-option:disabled {
-  cursor: default;
+.answer-option.viewing {
+  outline: 2px solid var(--color-neutral-700);
+  outline-offset: 2px;
 }
 /* session */
 .result-badge {

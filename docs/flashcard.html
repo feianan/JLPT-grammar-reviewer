@@ -57,12 +57,14 @@
           currentOptions,
           isCorrect,
           selectedIndex,
+          viewingOption,
         } = fcState;
         const g = pool[index];
+        const viewedG = answered ? currentOptions[viewingOption].grammar : g;
 
         el.innerHTML = `
     <div class="session-header">
-      <span>得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <span>得分 ${score}／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
       <button class="btn" onclick="endFc()">結束</button>
     </div>
     <div class="question-card">
@@ -76,8 +78,9 @@
             if (answered) {
               if (opt.correct) cls += " correct";
               else if (i === selectedIndex) cls += " wrong";
+              if (i === viewingOption) cls += " viewing";
             }
-            return `<button class="${cls}" onclick="selectOption(${i})" ${answered ? "disabled" : ""}>${esc(opt.grammar.meaning)}</button>`;
+            return `<button class="${cls}" onclick="${answered ? `viewFcOption(${i})` : `selectOption(${i})`}">${esc(opt.grammar.meaning)}</button>`;
           })
           .join("")}
         ${
@@ -86,17 +89,17 @@
           <div class="answer-feedback">
             <div class="answer-bar">
               <span class="answer-result-text" style="color:${isCorrect ? "var(--color-success-700)" : "var(--color-error-700)"}">
-                ${isCorrect ? "答對了！" : "答錯了"}
+                ${isCorrect ? "✅ 答對ㄌ！" : "❌ 答錯ㄌ QQ"}
               </span>
               <button class="btn btn-primary" onclick="fcNext()">下一題 →</button>
             </div>
             <div class="answer-detail">
-              <div class="detail-grammar">${esc(g.grammar)}</div>
-              <div class="meaning">${esc(g.meaning)}</div>
-              ${g.examples[0]?.jp ? `<div class="example-jp">${esc(g.examples[0].jp)}</div>` : ""}
-              ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
-              ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
-              ${g.url ? `<div style="margin-top:var(--space-xl)"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+              <div class="detail-grammar">${esc(viewedG.grammar)}</div>
+              <div class="meaning">${esc(viewedG.meaning)}</div>
+              ${viewedG.examples[0]?.jp ? `<div class="example-jp">${esc(viewedG.examples[0].jp)}</div>` : ""}
+              ${viewedG.examples[0]?.zh ? `<div class="example-zh">${esc(viewedG.examples[0].zh)}</div>` : ""}
+              ${viewedG.supplement ? `<div class="supplement">${esc(viewedG.supplement)}</div>` : ""}
+              ${viewedG.url ? `<div style="margin-top:var(--space-2xl)"><a href="${viewedG.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
             </div>
           </div>
         `
@@ -147,6 +150,7 @@
           answered: false,
           isCorrect: false,
           selectedIndex: null,
+          viewingOption: null,
           currentOptions,
         };
         renderFlashcard();
@@ -166,10 +170,16 @@
           answered: true,
           isCorrect,
           selectedIndex: optIndex,
+          viewingOption: optIndex,
           score: fcState.score + (isCorrect ? 1 : 0),
           total: fcState.total + 1,
           history: [...fcState.history, { q: pool[index], correct: isCorrect }],
         };
+        renderFlashcard();
+      }
+
+      function viewFcOption(i) {
+        fcState = { ...fcState, viewingOption: i };
         renderFlashcard();
       }
 
