@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JLPT N2 文法複習 - 單字卡</title>
+    <title>JLPT N2 文法複習 - 文法測試</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -14,11 +14,7 @@
     <script src="./src/header-nav.js"></script>
     <script>
       let cycles = MemoryState.load();
-      let fcIndex = 0;
-      let fcPool = [];
-      let currentLowestCycle = 0;
-      let fcAnswered = false;
-      let fcCurrentOptions = []; // [{ grammar, correct }, ...]
+      let fcState = null;
 
       initHeaderNav("flashcard");
       updateProgress();
@@ -36,159 +32,185 @@
         return a;
       }
 
-      function renderFlashcard(reshuffle = false) {
-        const lowestCycleItems = MemoryState.getLowestCycleItems(
-          GRAMMAR_DB,
-          cycles,
-        );
-
-        if (reshuffle || fcPool.length !== lowestCycleItems.length) {
-          fcPool = shuffleArray(lowestCycleItems);
-          fcIndex = 0;
-          currentLowestCycle =
-            lowestCycleItems.length > 0
-              ? MemoryState.getCycle(lowestCycleItems[0].id, cycles)
-              : 0;
+      function renderFlashcard() {
+        const el = document.getElementById("tab-content");
+        if (!fcState) {
+          el.innerHTML = `
+      <div class="card start-card">
+        <div class="start-title">單字卡練習</div>
+        <div class="start-description">看文法，選出正確的中文意思</div>
+        <button class="btn btn-primary" onclick="startFc()">開始測驗</button>
+      </div>`;
+          return;
+        }
+        if (fcState.ended) {
+          renderFcReport();
+          return;
         }
 
-        if (fcIndex >= fcPool.length) {
-          fcPool = shuffleArray(
-            MemoryState.getLowestCycleItems(GRAMMAR_DB, cycles),
-          );
-          fcIndex = 0;
-          currentLowestCycle =
-            fcPool.length > 0 ? MemoryState.getCycle(fcPool[0].id, cycles) : 0;
-        }
+        const {
+          pool,
+          index,
+          score,
+          total,
+          answered,
+          currentOptions,
+          isCorrect,
+          selectedIndex,
+        } = fcState;
+        const g = pool[index];
 
-        const pool = fcPool;
-        const g = pool[fcIndex];
-        fcAnswered = false;
-
-        const wrongItems = shuffleArray(
-          GRAMMAR_DB.filter((x) => x.id !== g.id),
-        ).slice(0, 2);
-        fcCurrentOptions = shuffleArray([
-          { grammar: g, correct: true },
-          { grammar: wrongItems[0], correct: false },
-          { grammar: wrongItems[1], correct: false },
-        ]);
-
-        const optionsHtml = fcCurrentOptions
-          .map(
-            (opt, i) =>
-              `<button class="quiz-option" id="fc-opt-${i}" data-correct="${opt.correct}" data-gid="${opt.grammar.id}" onclick="selectOption(${g.id}, ${opt.correct}, ${i})">${esc(opt.grammar.meaning)}</button>`,
-          )
-          .join("");
-
-        document.getElementById("tab-content").innerHTML = `
-    <div class="fc-card">
-      <div class="section-label" style="margin-bottom:.5rem">這個文法的意思是？</div>
-      <div style="font-size:var(--font-3xl);font-weight:700;color:var(--color-text-primary);margin:1rem 0">${esc(g.grammar)}</div>
-      <div class="tags" style="justify-content:center">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
-      <div style="width:100%;margin-top:1.5rem">
-        ${optionsHtml}
-        <div id="fc-feedback" style="display:none;margin-top:1rem">
-          <div id="fc-result-box" style="border-radius:12px;border:1px solid var(--color-border);background:var(--color-neutral-50);padding:1.5rem 1.75rem 2rem">
-            <div style="margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--color-border)">
-              <span id="fc-result-text" style="font-size:var(--font-base);font-weight:700"></span>
+        el.innerHTML = `
+    <div class="session-header">
+      <span>得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+      <button class="btn" onclick="endFc()">結束</button>
+    </div>
+    <div class="question-card">
+      <div class="section-label">這個文法的意思是？</div>
+      <div class="question-grammar">${esc(g.grammar)}</div>
+      <div class="tags">${g.prefix.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>
+      <div class="question-options">
+        ${currentOptions
+          .map((opt, i) => {
+            let cls = "answer-option";
+            if (answered) {
+              if (opt.correct) cls += " correct";
+              else if (i === selectedIndex) cls += " wrong";
+            }
+            return `<button class="${cls}" onclick="selectOption(${i})" ${answered ? "disabled" : ""}>${esc(opt.grammar.meaning)}</button>`;
+          })
+          .join("")}
+        ${
+          answered
+            ? `
+          <div class="answer-feedback">
+            <div class="answer-bar">
+              <span class="answer-result-text" style="color:${isCorrect ? "var(--color-success-700)" : "var(--color-error-700)"}">
+                ${isCorrect ? "答對了！" : "答錯了"}
+              </span>
+              <button class="btn btn-primary" onclick="fcNext()">下一題 →</button>
             </div>
-            <div id="fc-detail"></div>
+            <div class="answer-detail">
+              <div class="detail-grammar">${esc(g.grammar)}</div>
+              <div class="meaning">${esc(g.meaning)}</div>
+              ${g.examples[0]?.jp ? `<div class="example-jp">${esc(g.examples[0].jp)}</div>` : ""}
+              ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
+              ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
+              ${g.url ? `<div style="margin-top:var(--space-xl)"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
+            </div>
           </div>
-          <div id="fc-next-hint" style="text-align:center;margin-top:1.5rem;font-size:var(--font-xs);color:var(--color-text-muted)"></div>
-          <div id="fc-next-btn" style="display:none;text-align:center;margin-top:1.5rem">
-            <button class="btn btn-primary" onclick="fcNext()">下一題</button>
-          </div>
-        </div>
+        `
+            : ""
+        }
       </div>
     </div>
-    <div style="text-align:center;margin-top:.75rem;font-size:var(--font-xs);color:var(--color-text-muted)">${fcIndex + 1} / ${pool.length}（隨機順序）</div>
   `;
       }
 
-      function renderDetail(g) {
-        return `
-          <div class="meaning" style="margin-bottom:var(--space-xl)">${esc(g.meaning)}</div>
-          <div class="example-jp">${esc(g.examples[0]?.jp || "")}</div>
-          ${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}
-          ${g.supplement ? `<div class="supplement">${esc(g.supplement)}</div>` : ""}
-          ${g.url ? `<div style="margin-top:var(--space-xl)"><a href="${g.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">參考資料</a></div>` : ""}
-        `;
+      function startFc() {
+        const pool = shuffleArray(
+          MemoryState.getLowestCycleItems(GRAMMAR_DB, cycles),
+        );
+        if (!pool.length) return;
+        fcState = {
+          pool,
+          index: 0,
+          score: 0,
+          total: 0,
+          history: [],
+          answered: false,
+          isCorrect: false,
+          selectedIndex: null,
+          ended: false,
+          currentOptions: [],
+        };
+        prepareQuestion();
       }
 
-      function showDetail(gid) {
-        const g = GRAMMAR_DB.find((x) => x.id === gid);
-        if (!g) return;
-        document.getElementById("fc-detail").innerHTML = renderDetail(g);
-        // Highlight the active detail tab
-        for (let i = 0; i < 3; i++) {
-          const btn = document.getElementById(`fc-opt-${i}`);
-          if (!btn) continue;
-          btn.style.outline =
-            Number(btn.dataset.gid) === gid
-              ? "2px solid var(--color-neutral-400)"
-              : "none";
+      function prepareQuestion() {
+        if (fcState.index >= fcState.pool.length) {
+          fcState = { ...fcState, ended: true };
+          renderFlashcard();
+          return;
         }
+        const g = fcState.pool[fcState.index];
+        const wrong = shuffleArray(
+          GRAMMAR_DB.filter((x) => x.id !== g.id),
+        ).slice(0, 2);
+        const currentOptions = shuffleArray([
+          { grammar: g, correct: true },
+          { grammar: wrong[0], correct: false },
+          { grammar: wrong[1], correct: false },
+        ]);
+        fcState = {
+          ...fcState,
+          answered: false,
+          isCorrect: false,
+          selectedIndex: null,
+          currentOptions,
+        };
+        renderFlashcard();
       }
 
-      function selectOption(id, isCorrect, optIndex) {
-        if (fcAnswered) return;
-        fcAnswered = true;
-
-        // Apply correct/wrong styles and re-wire clicks to showDetail
-        for (let i = 0; i < 3; i++) {
-          const btn = document.getElementById(`fc-opt-${i}`);
-          if (!btn) continue;
-          const gid = Number(btn.dataset.gid);
-          btn.onclick = () => showDetail(gid);
-          if (btn.dataset.correct === "true") btn.classList.add("correct");
-        }
-        const selectedBtn = document.getElementById(`fc-opt-${optIndex}`);
-        if (selectedBtn && !isCorrect) selectedBtn.classList.add("wrong");
-
+      function selectOption(optIndex) {
+        if (fcState.answered) return;
+        const { currentOptions, pool, index } = fcState;
+        const isCorrect = currentOptions[optIndex].correct;
         if (isCorrect) {
-          cycles = MemoryState.incrementCycle(id, cycles);
+          cycles = MemoryState.incrementCycle(pool[index].id, cycles);
           saveCycles();
           updateProgress();
         }
-
-        const resultText = document.getElementById("fc-result-text");
-        const feedback = document.getElementById("fc-feedback");
-        const nextHint = document.getElementById("fc-next-hint");
-        if (resultText) {
-          resultText.textContent = isCorrect ? "答對了！週期 +1" : "答錯了";
-          resultText.style.color = isCorrect
-            ? "var(--color-success-700)"
-            : "var(--color-error-700)";
-        }
-        if (feedback) feedback.style.display = "block";
-
-        // Default: show the correct option's detail
-        const correctOption = fcCurrentOptions.find((o) => o.correct);
-        if (correctOption) showDetail(correctOption.grammar.id);
-
-        if (!isCorrect) {
-          const nextBtn = document.getElementById("fc-next-btn");
-          if (nextBtn) nextBtn.style.display = "block";
-        }
-
-        if (isCorrect) {
-          let remaining = 3;
-          if (nextHint) nextHint.textContent = `${remaining} 秒後自動前進…`;
-          const timer = setInterval(() => {
-            remaining--;
-            if (remaining > 0) {
-              if (nextHint) nextHint.textContent = `${remaining} 秒後自動前進…`;
-            } else {
-              clearInterval(timer);
-              fcNext();
-            }
-          }, 1000);
-        }
+        fcState = {
+          ...fcState,
+          answered: true,
+          isCorrect,
+          selectedIndex: optIndex,
+          score: fcState.score + (isCorrect ? 1 : 0),
+          total: fcState.total + 1,
+          history: [...fcState.history, { q: pool[index], correct: isCorrect }],
+        };
+        renderFlashcard();
       }
 
       function fcNext() {
-        fcIndex++;
+        fcState = { ...fcState, index: fcState.index + 1 };
+        prepareQuestion();
+      }
+
+      function endFc() {
+        fcState = { ...fcState, ended: true };
         renderFlashcard();
+      }
+
+      function renderFcReport() {
+        const { history, score, total } = fcState;
+        document.getElementById("tab-content").innerHTML = `
+    <div class="session-header">
+      <span>得分 <strong>${score}</strong>／${total}　正確率 ${total ? Math.round((score / total) * 100) : 0}%</span>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="grammar-list">
+        ${[...history]
+          .sort((a, b) => a.correct - b.correct)
+          .map(
+            ({ q, correct }) => `
+          <div class="grammar-item">
+            <div>
+              <div class="grammar-item-name">${esc(q.grammar)}</div>
+              <div class="grammar-item-meaning">${esc(q.meaning)}</div>
+            </div>
+            <span class="result-badge ${correct ? "correct" : "wrong"}">${correct ? "答對" : "答錯"}</span>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:1rem">
+      <button class="btn btn-primary" onclick="startFc()">開始新測試</button>
+    </div>
+  `;
       }
 
       function esc(s) {
@@ -200,7 +222,7 @@
       }
 
       updateProgress();
-      renderFlashcard(true);
+      renderFlashcard();
     </script>
   </body>
 </html>

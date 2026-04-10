@@ -2,9 +2,9 @@
 function initHeaderNav(currentPage) {
   const navItems = [
     { href: "index.html", icon: "📚", label: "瀏覽", id: "browse" },
-    { href: "flashcard.html", icon: "🃏", label: "單字卡", id: "flashcard" },
+    { href: "flashcard.html", icon: "🃏", label: "文法測試", id: "flashcard" },
+    { href: "quiz.html", icon: "✏️", label: "翻譯測試", id: "quiz" },
     { href: "compare.html", icon: "⚖️", label: "語氣比較", id: "compare" },
-    { href: "quiz.html", icon: "✏️", label: "翻譯挑戰", id: "quiz" },
   ];
 
   const tabsHtml = navItems
