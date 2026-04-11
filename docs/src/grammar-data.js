@@ -1,9 +1,26 @@
+const PREFIX = Object.freeze({
+  NOUN: "名詞",
+  ADJ: "形容詞",
+  VERB_DICT: "動詞辭書形",
+  VERB_TA: "動詞た形",
+  VERB_MASU: "動詞ます形",
+  VERB_TE: "動詞て形",
+  VERB_BA: "動詞ば形",
+  VERB_NEG: "動詞否定形",
+  VERB_VOLITIONAL: "動詞意向形",
+  VERB_POTENTIAL: "動詞可能形",
+  VERB_PASSIVE: "動詞受身形",
+  VERB_CAUSATIVE: "動詞使役形",
+  VERB_CAUSATIVE_PASSIVE: "動詞使役受身形",
+  SENTENCE_START: "句首",
+});
+
 const GRAMMAR_DB = [
   {
     id: 1,
     grammar: "〜ば〜のに／〜たら〜のに",
     meaning: "要是～的話就～了（帶有失望之感）",
-    prefix: ["動詞ば形"],
+    prefix: [PREFIX.VERB_BA],
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/33",
     examples: [{ jp: "安かったら買うのに。", zh: "要是便宜的話就買了。" }],
   },
@@ -11,7 +28,7 @@ const GRAMMAR_DB = [
     id: 2,
     grammar: "〜あげる",
     meaning: "我／我親友給予同輩他人～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 242,
     supplement: "A が B に〜あげる:：A 給予 B",
     examples: [
@@ -22,14 +39,14 @@ const GRAMMAR_DB = [
     id: 3,
     grammar: "〜たらいいでしょか",
     meaning: "～的話才好呢？",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     examples: [{ jp: "どう行ったらいいでしょうか。", zh: "該怎麼去才好呢？" }],
   },
   {
     id: 4,
     grammar: "〜かねる",
     meaning: "（心理上的原因）很難～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 560,
     url: "https://colanekojp.com.tw/classroom_detail/471",
     examples: [
@@ -43,7 +60,7 @@ const GRAMMAR_DB = [
     id: 5,
     grammar: "〜ばよかった／たらよかった",
     meaning: "要是～就好了（對當初沒有做的事情感到遺憾）",
-    prefix: ["動詞ば形"],
+    prefix: [PREFIX.VERB_BA],
     page: 363,
     supplement:
       "如果是否定形「〜なければよかった」、「〜なかったらよかった」則表示對已經做了的事情感到後悔",
@@ -59,7 +76,7 @@ const GRAMMAR_DB = [
     id: 6,
     grammar: "〜（の）とおり",
     meaning: "正如〜",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 317,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/64",
     examples: [
@@ -73,7 +90,7 @@ const GRAMMAR_DB = [
     id: 7,
     grammar: "〜ように言う",
     meaning: "命令、要求對方做到「ように」前面提到的內容",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/44",
     examples: [
       {
@@ -86,14 +103,14 @@ const GRAMMAR_DB = [
     id: 8,
     grammar: "〜のか",
     meaning: "要求對方說明或詢問對方",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     examples: [{ jp: "どうして遅れたのか。", zh: "為什麼遲到了？" }],
   },
   {
     id: 9,
     grammar: "〜ようにしている",
     meaning: "已經在進行的長期習慣",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 369,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/43",
     examples: [
@@ -107,7 +124,7 @@ const GRAMMAR_DB = [
     id: 10,
     grammar: "〜こそ",
     meaning: "正是～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 395,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/21",
     examples: [{ jp: "あなたこそ嘘つきだ。", zh: "你才是說謊的人。" }],
@@ -116,7 +133,7 @@ const GRAMMAR_DB = [
     id: 11,
     grammar: "〜こと",
     meaning: "（使前面的修飾短句名詞化）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 153,
     supplement:
       "跟 のは／のが 不能互換的情況：後接 です、が大切だ、を約束する。",
@@ -128,7 +145,7 @@ const GRAMMAR_DB = [
     id: 12,
     grammar: "〜ということだ",
     meaning: "也就是說～（結論）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 199,
     supplement: "根據前項情報，得到某種結論",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/60",
@@ -143,7 +160,7 @@ const GRAMMAR_DB = [
     id: 13,
     grammar: "〜というのは",
     meaning: "所謂的 A 就是 B",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/61",
     examples: [
       {
@@ -156,7 +173,7 @@ const GRAMMAR_DB = [
     id: 14,
     grammar: "〜にしたがって",
     meaning: "隨著～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 318,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/82",
     examples: [
@@ -170,7 +187,7 @@ const GRAMMAR_DB = [
     id: 15,
     grammar: "〜ませんか",
     meaning: "勸誘、邀約",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 129,
     examples: [{ jp: "一緒に歌いませんか。", zh: "要不要一起唱歌？" }],
   },
@@ -178,7 +195,7 @@ const GRAMMAR_DB = [
     id: 16,
     grammar: "〜ましょうか",
     meaning: "邀請一起做～／提議某個行動",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 129,
     examples: [{ jp: "窓をしめましょうか。", zh: "要不要關窗戶？" }],
   },
@@ -186,7 +203,7 @@ const GRAMMAR_DB = [
     id: 17,
     grammar: "〜ほうがいい〜",
     meaning: "建議不要怎麼做",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 128,
     examples: [
       {
@@ -199,7 +216,7 @@ const GRAMMAR_DB = [
     id: 18,
     grammar: "〜でも",
     meaning: "就連～也",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 140,
     examples: [
       {
@@ -212,7 +229,7 @@ const GRAMMAR_DB = [
     id: 19,
     grammar: "〜ことに",
     meaning: "值得（感情）的是～",
-    prefix: ["動詞た形", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.ADJ],
     page: 539,
     url: "https://www.hikky.com.tw/propage.php?P_id=244&PC_id=19",
     examples: [
@@ -226,7 +243,7 @@ const GRAMMAR_DB = [
     id: 20,
     grammar: "〜しか",
     meaning: "只能",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 22,
     examples: [
       { jp: "この店では、カードしか使えません。", zh: "這家店只能刷卡。" },
@@ -236,7 +253,7 @@ const GRAMMAR_DB = [
     id: 21,
     grammar: "〜いっぽう（一方）",
     meaning: "越來越～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 306,
     supplement: "多用於消極、不利語意",
     examples: [
@@ -250,7 +267,7 @@ const GRAMMAR_DB = [
     id: 22,
     grammar: "〜たび（に）",
     meaning: "每當～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 427,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/39",
     examples: [
@@ -264,7 +281,7 @@ const GRAMMAR_DB = [
     id: 23,
     grammar: "〜とおもう",
     meaning: "想要～（說話當時有這樣的想法）",
-    prefix: ["動詞意向形"],
+    prefix: [PREFIX.VERB_VOLITIONAL],
     page: 125,
     url: "https://colanekojp.com.tw/classroom_detail/86",
     examples: [{ jp: "画家になろうと思います。", zh: "想要成為畫家。" }],
@@ -273,7 +290,7 @@ const GRAMMAR_DB = [
     id: 24,
     grammar: "〜ことだ",
     meaning: "應當、就該～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 546,
     supplement: "≒ ～したほうがいい",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/23",
@@ -288,7 +305,7 @@ const GRAMMAR_DB = [
     id: 25,
     grammar: "〜（な）のに",
     meaning: "明明～卻～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 227,
     supplement: "表達不滿情緒只能用 のに，不能用 けど。",
     examples: [
@@ -299,7 +316,7 @@ const GRAMMAR_DB = [
     id: 26,
     grammar: "〜ことになる",
     meaning: "（他人或自然）被決定要～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 177,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/41",
     examples: [
@@ -313,7 +330,7 @@ const GRAMMAR_DB = [
     id: 27,
     grammar: "〜なんて／なんか",
     meaning: "1. 等等、之類 2. 竟然，表意外、懷疑 3. 輕視",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 397,
     url: "https://colanekojp.com.tw/classroom_detail/138",
     examples: [
@@ -331,7 +348,7 @@ const GRAMMAR_DB = [
     id: 28,
     grammar: "〜がほしい",
     meaning: "想要得到手～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 178,
     examples: [
       { jp: "今何がいちばんほしいですか。", zh: "現在你最想要的是什麼？" },
@@ -341,7 +358,7 @@ const GRAMMAR_DB = [
     id: 29,
     grammar: "にしろにしろ／〜にせよ〜にせよ／〜にしても〜にしても",
     meaning: "～也好，～也好，都～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     url: "https://nihongonosensei.net/?p=11303",
     examples: [
       {
@@ -354,7 +371,7 @@ const GRAMMAR_DB = [
     id: 30,
     grammar: "〜というより（も）",
     meaning: "與其說～不如說",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 527,
     supplement: "約等於というか",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/62",
@@ -369,7 +386,7 @@ const GRAMMAR_DB = [
     id: 31,
     grammar: "〜てもかまわない",
     meaning: "即使～也沒關係～",
-    prefix: ["動詞て形", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.ADJ],
     page: 167,
     examples: [
       { jp: "何時帰ってもかまいませんよ。", zh: "幾點回來都沒關係喔。" },
@@ -379,7 +396,7 @@ const GRAMMAR_DB = [
     id: 32,
     grammar: "〜ものだ",
     meaning: "1. 竟然～\n  2. 就應該～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 544,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/118",
     examples: [{ jp: "犬は吠えるものだよ。", zh: "狗本來就愛叫。" }],
@@ -389,7 +406,7 @@ const GRAMMAR_DB = [
     grammar: "〜とおもった",
     meaning:
       "（現在開始有這樣的想法，強調想法變化了）\n1. 意向形：想要～\n2. 辭書形、名詞、形容詞：覺得～",
-    prefix: ["動詞意向形", "動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_VOLITIONAL, PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     url: "https://colanekojp.com.tw/classroom_detail/86",
     examples: [{ jp: "画家になろうと思いました。", zh: "開始想要成為畫家。" }],
   },
@@ -397,7 +414,7 @@ const GRAMMAR_DB = [
     id: 34,
     grammar: "〜からには",
     meaning: "既然～",
-    prefix: ["動詞た形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT],
     page: 324,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/13",
     examples: [
@@ -411,7 +428,7 @@ const GRAMMAR_DB = [
     id: 35,
     grammar: "〜（自動詞）ている",
     meaning: "（與意圖無關的持續狀態）正在～／已經～了",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 87,
     supplement: "跟〜てある有語意差距",
     examples: [{ jp: "雪が降っている。", zh: "正下著雪。" }],
@@ -420,7 +437,7 @@ const GRAMMAR_DB = [
     id: 36,
     grammar: "〜てもいい",
     meaning: "～也可以",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 128,
     examples: [{ jp: "日本語で話してもいいです。", zh: "說日文也可以。" }],
   },
@@ -428,7 +445,7 @@ const GRAMMAR_DB = [
     id: 37,
     grammar: "〜ことがある",
     meaning: "（有時）會發生～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 206,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/40",
     examples: [
@@ -442,7 +459,7 @@ const GRAMMAR_DB = [
     id: 38,
     grammar: "〜ふりをする",
     meaning: "裝作～的樣子",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     supplement: "「見て見ぬふりをする」是慣用句「視而不見」",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/103",
     examples: [{ jp: "平気なふりをしている。", zh: "裝作沒事的樣子。" }],
@@ -451,7 +468,7 @@ const GRAMMAR_DB = [
     id: 39,
     grammar: "〜ましょう",
     meaning: "意志",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 129,
     examples: [{ jp: "一緒に歌いましょう。", zh: "一起唱歌吧。" }],
   },
@@ -459,7 +476,7 @@ const GRAMMAR_DB = [
     id: 40,
     grammar: "〜てばかりいる／〜ばかり〜ている",
     meaning: "老是、總是做～（負面）",
-    prefix: ["動詞て形", "名詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.NOUN],
     page: 303,
     examples: [{ jp: "彼はスマホばかり見ている。", zh: "他老是在看手機。" }],
   },
@@ -467,7 +484,7 @@ const GRAMMAR_DB = [
     id: 41,
     grammar: "〜のを",
     meaning: "（使前面的修飾短句名詞化）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 153,
     url: "https://www.youtube.com/watch?v=qQPUDOb9Um8",
     examples: [
@@ -481,7 +498,7 @@ const GRAMMAR_DB = [
     id: 42,
     grammar: "〜といっても",
     meaning: "雖說～但是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 493,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/63",
     examples: [
@@ -495,7 +512,7 @@ const GRAMMAR_DB = [
     id: 43,
     grammar: "〜にあたって / 〜にあたり",
     meaning: "在～的時候",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 456,
     supplement: "多用在重要場合如入學、結婚等",
     url: "https://aiueo.cc/pages/cht/grammar/web/472.php",
@@ -510,7 +527,7 @@ const GRAMMAR_DB = [
     id: 44,
     grammar: "〜たい",
     meaning: "（第一人稱）想要～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 122,
     examples: [{ jp: "まだ帰りたくないです。", zh: "還不想回家。" }],
   },
@@ -518,7 +535,7 @@ const GRAMMAR_DB = [
     id: 45,
     grammar: "〜だけで",
     meaning: "光是～就",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 395,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/35",
     examples: [
@@ -536,7 +553,7 @@ const GRAMMAR_DB = [
     id: 46,
     grammar: "〜かなあ",
     meaning: "不知會不會～；希望～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     supplement: "＝かどうかわからない",
     examples: [
       {
@@ -549,7 +566,7 @@ const GRAMMAR_DB = [
     id: 47,
     grammar: "〜として",
     meaning: "作為～（身份、資格、立場）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 324,
     supplement: "としては：就～而言；としても：作為～也～",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/68",
@@ -564,7 +581,7 @@ const GRAMMAR_DB = [
     id: 48,
     grammar: "〜て〜て",
     meaning: "連續做兩個或以上的動作或事情",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 105,
     examples: [
       {
@@ -577,7 +594,7 @@ const GRAMMAR_DB = [
     id: 49,
     grammar: "〜たら",
     meaning: "如果～後，～",
-    prefix: ["動詞た形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN, PREFIX.ADJ],
     page: 232,
     supplement: "常跟〜（の）なら〜比較",
     url: "https://colanekojp.com.tw/classroom_detail/199",
@@ -589,7 +606,7 @@ const GRAMMAR_DB = [
     id: 50,
     grammar: "〜といった",
     meaning: "～等（列舉）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     url: "https://nihongokyoshi-net.com/2019/05/23/jlptn2-grammar-toitta/",
     examples: [
       {
@@ -602,7 +619,7 @@ const GRAMMAR_DB = [
     id: 51,
     grammar: "〜さえ（も）",
     meaning: "甚至～（列舉某個極端例子來駁斥其他事物更不用提了）",
-    prefix: ["動詞意向形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_VOLITIONAL, PREFIX.VERB_DICT],
     page: 525,
     supplement: "多數時候可與 でも 互換，但 でも 偏向列舉極端例子",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/30",
@@ -621,7 +638,7 @@ const GRAMMAR_DB = [
     id: 52,
     grammar: "〜とこは〜が",
     meaning: "雖然是～，但～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     url: "https://nani-blog.com/jlpt-grammar-kotohaga/",
     examples: [
       {
@@ -634,7 +651,7 @@ const GRAMMAR_DB = [
     id: 53,
     grammar: "〜そう",
     meaning: "好像～",
-    prefix: ["動詞ます形", "形容詞"],
+    prefix: [PREFIX.VERB_MASU, PREFIX.ADJ],
     page: 188,
     url: "https://blog-tw.amazingtalker.com/blog/2017/3/17",
     examples: [
@@ -646,7 +663,7 @@ const GRAMMAR_DB = [
     id: 54,
     grammar: "〜たり〜たりする",
     meaning: "又是～，又是～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 88,
     examples: [
       {
@@ -659,7 +676,7 @@ const GRAMMAR_DB = [
     id: 55,
     grammar: "〜まで",
     meaning: "1. 在～（時間）之前持續做\n2. 甚至～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 138,
     supplement: "表示動作會持續到期限之前。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/48",
@@ -672,7 +689,7 @@ const GRAMMAR_DB = [
     id: 56,
     grammar: "〜がする",
     meaning: "（感官上）感到～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 176,
     supplement:
       "感官上感受到傳來的感覺，如嗅覺、聽覺、味覺、觸覺、第六感等，多用於「氣味、聲音、口味、預感、發冷、想吐」等情況。",
@@ -688,7 +705,7 @@ const GRAMMAR_DB = [
     id: 57,
     grammar: "〜ながら",
     meaning: "一邊～一邊～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 88,
     examples: [
       { jp: "お茶を飲みながら、テレビを見ます。", zh: "邊喝茶邊看電視。" },
@@ -698,7 +715,7 @@ const GRAMMAR_DB = [
     id: 58,
     grammar: "〜なくてはいけない",
     meaning: "（社會常識上）必須～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 164,
     examples: [{ jp: "勉強しなくてもいけません。", zh: "必須用功讀書。" }],
   },
@@ -706,7 +723,7 @@ const GRAMMAR_DB = [
     id: 59,
     grammar: "〜に決まっている",
     meaning: "肯定是～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/80",
     examples: [
       {
@@ -719,7 +736,7 @@ const GRAMMAR_DB = [
     id: 60,
     grammar: "〜につき",
     meaning: "[鄭重] 因為～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 279,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/85",
     examples: [
@@ -733,7 +750,7 @@ const GRAMMAR_DB = [
     id: 61,
     grammar: "〜たあとで〜",
     meaning: "做完～後，做～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     examples: [
       {
         jp: "仕事を終えた後で、友達と食事に行った。",
@@ -745,7 +762,7 @@ const GRAMMAR_DB = [
     id: 62,
     grammar: "〜（他動詞）てある",
     meaning: "（強調有意圖導致的持續狀態）已經～了",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 87,
     supplement: "跟〜ている有語意差距",
     examples: [{ jp: "黒板に名前が書いてあります。", zh: "黑板上寫了名字" }],
@@ -754,7 +771,7 @@ const GRAMMAR_DB = [
     id: 63,
     grammar: "〜ようにする",
     meaning: "為了達到前項內容而努力，是一種下決心要培養的習慣",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 369,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/43",
     examples: [
@@ -768,7 +785,7 @@ const GRAMMAR_DB = [
     id: 64,
     grammar: "〜たばかりだ",
     meaning: "剛剛做完～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     supplement: "=たて",
     examples: [{ jp: "友達と会ったばかりです。", zh: "才剛和朋友見過面。" }],
   },
@@ -776,7 +793,7 @@ const GRAMMAR_DB = [
     id: 65,
     grammar: "〜（の）はず",
     meaning: "1. （照理說）應該～\n2. 難怪～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 188,
     supplement: "個人根據事實或知識的主觀推論。",
     examples: [
@@ -790,7 +807,7 @@ const GRAMMAR_DB = [
     id: 66,
     grammar: "〜（自動詞）ように",
     meaning: "為了／為了不（讓現象發生）～",
-    prefix: ["動詞可能形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_POTENTIAL, PREFIX.VERB_DICT],
     url: "https://jp.sonic-learning.com/2020/10/31/gl49/",
     examples: [
       {
@@ -807,7 +824,7 @@ const GRAMMAR_DB = [
     id: 67,
     grammar: "〜ことにする",
     meaning: "（自己）決定要～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 177,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/41",
     examples: [
@@ -825,7 +842,7 @@ const GRAMMAR_DB = [
     id: 68,
     grammar: "〜っぱなし",
     meaning: "做了某動作之後就不管了",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     supplement:
       "「っぱなし」的用法相當於「～まま」，差別在於「っぱなし」多帶有負面評價。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/44",
@@ -837,7 +854,7 @@ const GRAMMAR_DB = [
     id: 69,
     grammar: "〜というものだ",
     meaning: "這就是所謂的～（感想）",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 568,
     url: "https://nihongonosensei.net/?p=26367",
     examples: [
@@ -851,7 +868,7 @@ const GRAMMAR_DB = [
     id: 70,
     grammar: "〜ほど〜ない",
     meaning: "沒有（前項）那麼（後項）～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 313,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/108",
     examples: [
@@ -862,7 +879,7 @@ const GRAMMAR_DB = [
     id: 71,
     grammar: "〜（の）まま",
     meaning: "表狀態持續",
-    prefix: ["動詞た形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN, PREFIX.ADJ],
     page: 317,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/110",
     examples: [
@@ -877,7 +894,7 @@ const GRAMMAR_DB = [
     id: 72,
     grammar: "〜なさい",
     meaning: "請～（命令）",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 163,
     examples: [{ jp: "勉強しなさい。", zh: "請去讀書。" }],
   },
@@ -885,7 +902,7 @@ const GRAMMAR_DB = [
     id: 73,
     grammar: "〜ておく／〜とく",
     meaning: "事先做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     examples: [
       { jp: "旅行の前に、切符を買っておく。", zh: "旅行之前先買好車票。" },
       {
@@ -898,7 +915,7 @@ const GRAMMAR_DB = [
     id: 74,
     grammar: "〜を〜とする",
     meaning: "把 A 當作 B",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 550,
     url: "https://colanekojp.com.tw/classroom_detail/348",
     examples: [{ jp: "服を雑巾とします。", zh: "把衣服直接拿來抹布使用" }],
@@ -907,7 +924,7 @@ const GRAMMAR_DB = [
     id: 75,
     grammar: "〜たことがある／ない",
     meaning: "（過去）發生過～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 206,
     examples: [
       { jp: "私は日本に行ったことがあります。", zh: "我曾去過日本。" },
@@ -917,7 +934,7 @@ const GRAMMAR_DB = [
     id: 76,
     grammar: "〜ばかりか〜（も／さえ／まで）",
     meaning: "不僅～而且",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 378,
     supplement: "表示除前項情況以外，後項程度更甚。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/98",
@@ -932,7 +949,7 @@ const GRAMMAR_DB = [
     id: 77,
     grammar: "〜しだい（次第）",
     meaning: "1. 演變成～結果\n  2. 一～就馬上",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 463,
     supplement: "日檢常考",
     url: "https://colanekojp.com.tw/blog_detail/51",
@@ -947,7 +964,7 @@ const GRAMMAR_DB = [
     id: 78,
     grammar: "〜かどうか",
     meaning: "是否～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 142,
     url: "http://ilovejp-blog.com/japanese-middle-30",
     examples: [
@@ -958,7 +975,7 @@ const GRAMMAR_DB = [
     id: 79,
     grammar: "〜なくてはならない",
     meaning: "（社會常識上）必須～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 165,
     examples: [
       {
@@ -971,7 +988,7 @@ const GRAMMAR_DB = [
     id: 80,
     grammar: "〜（な）ので",
     meaning: "（客觀的）因為～所以～",
-    prefix: ["動詞た形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN, PREFIX.ADJ],
     supplement:
       "「から」→「主觀描述、較不客氣、強硬」\n「ので」→「客觀描述、比較委婉、尊重」",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/32",
@@ -987,7 +1004,7 @@ const GRAMMAR_DB = [
     id: 81,
     grammar: "〜のが",
     meaning: "（使前面的修飾短句名詞化）表示喜好、能力",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 153,
     url: "https://www.youtube.com/watch?v=qQPUDOb9Um8",
     examples: [
@@ -1001,7 +1018,7 @@ const GRAMMAR_DB = [
     id: 82,
     grammar: "〜てから",
     meaning: "1. 先做～再做～\n2. 從某個時間點之後～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 104,
     examples: [
       {
@@ -1014,7 +1031,7 @@ const GRAMMAR_DB = [
     id: 83,
     grammar: "〜ずに（＝ないで）",
     meaning: "沒有做～就～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 99,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/21",
     examples: [
@@ -1029,7 +1046,7 @@ const GRAMMAR_DB = [
     id: 84,
     grammar: "〜によると／によれば",
     meaning: "根據（傳言）〜",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 448,
     supplement:
       "による 常跟 によると 搞混\n文末常以「そうだ」、「ということだ」、「とのことだ」、「んだって」相呼應。",
@@ -1045,7 +1062,7 @@ const GRAMMAR_DB = [
     id: 85,
     grammar: "〜を〜にする",
     meaning: "將Ａ修改成Ｂ使用",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     url: "https://colanekojp.com.tw/classroom_detail/348",
     examples: [
       {
@@ -1058,7 +1075,7 @@ const GRAMMAR_DB = [
     id: 86,
     grammar: "〜たがる",
     meaning: "（第三人稱）顯露在外的希望",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 180,
     url: "https://ironglion.com/archives/867",
     examples: [{ jp: "彼女は、理由を言いたがらない。", zh: "她不想說理由。" }],
@@ -1067,7 +1084,7 @@ const GRAMMAR_DB = [
     id: 87,
     grammar: "〜はもちろん／はもとより",
     meaning: "～不用說，（後項也不意外）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 378,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/100",
     examples: [
@@ -1081,7 +1098,7 @@ const GRAMMAR_DB = [
     id: 88,
     grammar: "〜（の）なら",
     meaning: "如果～，先～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 234,
     supplement:
       "1. 通常以對方所說的事情會發生為前提，說話人提出勸告、意志、請求等。\n2. 常跟〜たら〜比較",
@@ -1097,7 +1114,7 @@ const GRAMMAR_DB = [
     id: 89,
     grammar: "〜について",
     meaning: "關於～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 201,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/03",
     examples: [
@@ -1111,7 +1128,7 @@ const GRAMMAR_DB = [
     id: 90,
     grammar: "〜ほど",
     meaning: "1. 大約\n  2. 甚至到～程度",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 312,
     supplement: "ほど經常可以和くらい互換。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/108",
@@ -1126,7 +1143,7 @@ const GRAMMAR_DB = [
     id: 91,
     grammar: "〜らしい",
     meaning: "（眼前客觀觀察）好像～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 191,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/24",
     examples: [
@@ -1144,7 +1161,7 @@ const GRAMMAR_DB = [
     id: 92,
     grammar: "〜といい（のに）",
     meaning: "（勸誘對方行為）～就好了\n希望某個願望成真",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 158,
     supplement:
       "可與〜たら（いいのに）／〜ば（いいのに）互換，表假定條件的「と」用於尚未發生的事情",
@@ -1162,7 +1179,7 @@ const GRAMMAR_DB = [
     grammar: "〜とおもっている",
     meaning:
       "（從以前就有這樣的想法）\n1. 意向形：想要～\n2. 辭書形、名詞、形容詞：覺得～",
-    prefix: ["動詞意向形", "動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_VOLITIONAL, PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 186,
     examples: [
       { jp: "画家になろうと思っています。", zh: "一直想要成為畫家。" },
@@ -1172,7 +1189,7 @@ const GRAMMAR_DB = [
     id: 94,
     grammar: "〜ところだった",
     meaning: "差一點就要～了",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 432,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/66",
     examples: [
@@ -1186,7 +1203,7 @@ const GRAMMAR_DB = [
     id: 95,
     grammar: "〜わりに（は）",
     meaning: "雖然～但相對還算～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 313,
     supplement: "表示結果跟前項條件不成比例",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/130",
@@ -1201,7 +1218,7 @@ const GRAMMAR_DB = [
     id: 96,
     grammar: "〜のまえに",
     meaning: "在～之前～（空間上）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 106,
     supplement: "若是指時間的之前，則不會加 の",
     examples: [{ jp: "駅の前に銀行があります。", zh: "車站前面有銀行。" }],
@@ -1210,7 +1227,7 @@ const GRAMMAR_DB = [
     id: 97,
     grammar: "〜あがる／あげる",
     meaning: "徹底完成",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/01",
     examples: [
       { jp: "ピザが焼きあがりました。", zh: "披薩烤好了。（自動詞）" },
@@ -1221,7 +1238,7 @@ const GRAMMAR_DB = [
     id: 98,
     grammar: "〜いじょう（は）",
     meaning: "既然～就要～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 468,
     url: "https://yasuwangblog.com/ijyouwa/",
     examples: [
@@ -1236,7 +1253,7 @@ const GRAMMAR_DB = [
     grammar: "〜とおもっていた",
     meaning:
       "（以前有這樣的意志，但現在沒有）\n1. 意向形：想要～\n2. 辭書形、名詞、形容詞：覺得～",
-    prefix: ["動詞意向形", "動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_VOLITIONAL, PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     examples: [
       { jp: "画家になろうと思っていました。", zh: "曾經想要成為畫家。" },
     ],
@@ -1245,7 +1262,7 @@ const GRAMMAR_DB = [
     id: 100,
     grammar: "〜ついで（に）",
     meaning: "順便～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 373,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/41",
     examples: [
@@ -1259,7 +1276,7 @@ const GRAMMAR_DB = [
     id: 101,
     grammar: "〜てはだめです",
     meaning: "不可以做",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     supplement:
       "相較 V てはいけません 偏向一般論 ，てはだめです 是針對聽者的行為",
     examples: [
@@ -1270,7 +1287,7 @@ const GRAMMAR_DB = [
     id: 102,
     grammar: "〜すぎる",
     meaning: "過於～",
-    prefix: ["動詞ます形", "形容詞"],
+    prefix: [PREFIX.VERB_MASU, PREFIX.ADJ],
     page: 198,
     examples: [
       { jp: "昨日、食べすぎたんです。", zh: "" },
@@ -1281,7 +1298,7 @@ const GRAMMAR_DB = [
     id: 103,
     grammar: "〜っぽい",
     meaning: "強烈的～傾向（較常用於負面傾向）",
-    prefix: ["動詞ます形", "名詞"],
+    prefix: [PREFIX.VERB_MASU, PREFIX.NOUN],
     page: 306,
     supplement: "らしい 是正面評價",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/45",
@@ -1291,7 +1308,7 @@ const GRAMMAR_DB = [
     id: 104,
     grammar: "〜ほかない／しかない",
     meaning: "別無他法只能～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 353,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/107",
     examples: [
@@ -1305,7 +1322,7 @@ const GRAMMAR_DB = [
     id: 105,
     grammar: "〜いくら（どんなに）ても／でも",
     meaning: "即使再怎麼～也～",
-    prefix: ["動詞て形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.NOUN, PREFIX.ADJ],
     examples: [
       {
         jp: "いくら話しても、分かってくれない。",
@@ -1317,7 +1334,7 @@ const GRAMMAR_DB = [
     id: 106,
     grammar: "〜ないと",
     meaning: "不～就（有負面結果）",
-    prefix: ["動詞否定形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_NEG, PREFIX.NOUN, PREFIX.ADJ],
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/75",
     examples: [
       { jp: "早く帰らないと母に叱られる。", zh: "不趕快回家的話會被媽媽罵。" },
@@ -1327,7 +1344,7 @@ const GRAMMAR_DB = [
     id: 107,
     grammar: "〜てみる",
     meaning: "嘗試做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 172,
     examples: [
       {
@@ -1340,7 +1357,7 @@ const GRAMMAR_DB = [
     id: 108,
     grammar: "〜というと／〜といえば",
     meaning: "說到～的話",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 480,
     url: "https://jp.sonic-learning.com/2012/04/23/mgl08/",
     examples: [
@@ -1354,7 +1371,7 @@ const GRAMMAR_DB = [
     id: 109,
     grammar: "〜てしまう／ちゃう",
     meaning: "1. 表示動作徹底完成\n  2. 表遺憾、糟糕情緒",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 110,
     examples: [{ jp: "亀が死んでしまいました。", zh: "遺憾烏龜死掉了。" }],
   },
@@ -1362,7 +1379,7 @@ const GRAMMAR_DB = [
     id: 110,
     grammar: "〜ないで（ください）",
     meaning: "請不要～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 124,
     examples: [{ jp: "ドアを閉めないで（ください）。", zh: "請不要關門。" }],
   },
@@ -1370,7 +1387,7 @@ const GRAMMAR_DB = [
     id: 111,
     grammar: "〜にくらべて",
     meaning: "跟～比較起來",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 375,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/81",
     examples: [
@@ -1381,7 +1398,7 @@ const GRAMMAR_DB = [
     id: 112,
     grammar: "〜てごらん",
     meaning: "試試看～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/50",
     examples: [
       { jp: "何が欲しいの？言ってごらん。", zh: "你想要什麼？說說看。" },
@@ -1391,7 +1408,7 @@ const GRAMMAR_DB = [
     id: 113,
     grammar: "〜ないではいられない／ずにはいられない",
     meaning: "忍不住～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 553,
     supplement: "表達因無法抑制某種情感而採取的行動",
     url: "https://aiueo.cc/pages/cht/grammar/web/477.php",
@@ -1403,7 +1420,7 @@ const GRAMMAR_DB = [
     id: 114,
     grammar: "〜ず（＝なくで）",
     meaning: "因為沒有，所以～",
-    prefix: ["動詞否定形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_NEG, PREFIX.NOUN, PREFIX.ADJ],
     supplement: "ず：前文可獨立。\nずに：前文無法獨立，若獨立通常是省略用法。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/21",
     examples: [
@@ -1415,7 +1432,7 @@ const GRAMMAR_DB = [
     id: 115,
     grammar: "〜ばかりだ",
     meaning: "越來越～（負面）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     url: "https://nihongokyoshi-net.com/2019/05/03/jlptn2-grammar-bakarida/",
     examples: [
       {
@@ -1428,7 +1445,7 @@ const GRAMMAR_DB = [
     id: 116,
     grammar: "〜きり",
     meaning: "只有、僅",
-    prefix: ["動詞た形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN],
     page: 508,
     supplement:
       "あれきり、それきり為既定單詞，其他動詞た形＋きり表示從那之後就沒有再發生過了。",
@@ -1448,7 +1465,7 @@ const GRAMMAR_DB = [
     id: 117,
     grammar: "〜ようになる",
     meaning: "無能力到有能力的轉變",
-    prefix: ["動詞意向形"],
+    prefix: [PREFIX.VERB_VOLITIONAL],
     page: 368,
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/43",
     examples: [
@@ -1462,7 +1479,7 @@ const GRAMMAR_DB = [
     id: 118,
     grammar: "〜とする",
     meaning: "正打算做、還未達成",
-    prefix: ["動詞意向形"],
+    prefix: [PREFIX.VERB_VOLITIONAL],
     supplement: "～（よ）うとしない：不願意做某事",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/31",
     examples: [
@@ -1476,7 +1493,7 @@ const GRAMMAR_DB = [
     id: 119,
     grammar: "〜において",
     meaning: "在～地點、方面、時間等",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 325,
     supplement: "較鄭重，一般可與「で」互換",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/77",
@@ -1491,7 +1508,7 @@ const GRAMMAR_DB = [
     id: 120,
     grammar: "〜ことはない／こともない",
     meaning: "用不著〜",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 287,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/24",
     examples: [
@@ -1505,7 +1522,7 @@ const GRAMMAR_DB = [
     id: 121,
     grammar: "〜ばかりに",
     meaning: "就因為～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 476,
     url: "https://nihongonosensei.net/?p=11948",
     examples: [
@@ -1519,7 +1536,7 @@ const GRAMMAR_DB = [
     id: 122,
     grammar: "〜ことか",
     meaning: "多麼～啊（加強感嘆語氣）",
-    prefix: ["形容詞"],
+    prefix: [PREFIX.ADJ],
     page: 574,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/22",
     examples: [
@@ -1533,7 +1550,7 @@ const GRAMMAR_DB = [
     id: 123,
     grammar: "〜（他動詞）ために",
     meaning: "為了做到～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 342,
     url: "https://jp.sonic-learning.com/2020/10/31/gl49/",
     examples: [
@@ -1544,7 +1561,7 @@ const GRAMMAR_DB = [
     id: 124,
     grammar: "〜のは",
     meaning: "（使前面的修飾短句名詞化）表示意見、感想，或強調某事",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 153,
     url: "https://www.youtube.com/watch?v=qQPUDOb9Um8",
     examples: [
@@ -1558,7 +1575,7 @@ const GRAMMAR_DB = [
     id: 125,
     grammar: "〜てください",
     meaning: "請～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 124,
     examples: [{ jp: "ちょっと待ってください。", zh: "請稍等一下。" }],
   },
@@ -1566,7 +1583,7 @@ const GRAMMAR_DB = [
     id: 126,
     grammar: "〜ものか",
     meaning: "怎麼會、哪可能",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 346,
     supplement: "比較禮貌的說法是「ものですか」",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/117",
@@ -1581,7 +1598,7 @@ const GRAMMAR_DB = [
     id: 127,
     grammar: "〜がる",
     meaning: "感到",
-    prefix: ["形容詞"],
+    prefix: [PREFIX.ADJ],
     page: 178,
     examples: [
       {
@@ -1594,7 +1611,7 @@ const GRAMMAR_DB = [
     id: 128,
     grammar: "〜てはじめて",
     meaning: "在～之後才～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     url: "https://nihongonosensei.net/?p=7121",
     examples: [
       {
@@ -1607,7 +1624,7 @@ const GRAMMAR_DB = [
     id: 129,
     grammar: "〜つもり",
     meaning: "（事前決定好）打算～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 125,
     supplement: "相對と思います，對某件事抱有更具體的計畫",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/38",
@@ -1619,7 +1636,7 @@ const GRAMMAR_DB = [
     id: 130,
     grammar: "〜てはいけません",
     meaning: "禁止",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 160,
     examples: [
       { jp: "この川で泳いではいけません。", zh: "禁止在此河川游泳。" },
@@ -1629,7 +1646,7 @@ const GRAMMAR_DB = [
     id: 131,
     grammar: "〜けれど（も）、けど",
     meaning: "雖然、可是",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 98,
     supplement: "けど 比 けれど 隨便",
     examples: [
@@ -1643,7 +1660,7 @@ const GRAMMAR_DB = [
     id: 132,
     grammar: "〜とき",
     meaning: "～的時候",
-    prefix: ["動詞た形", "動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 103,
     supplement:
       "- 動詞辭書形、形容詞、名詞 + とき：在前項的狀態下，同時有後項動作\n- 動詞過去式 + とき、動詞現在式：先有前者，後者才成立\n- 動詞現在式 + とき、動詞過去式：後者先發生，前者才發生",
@@ -1659,7 +1676,7 @@ const GRAMMAR_DB = [
     id: 133,
     grammar: "〜あとで",
     meaning: "～以後",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 105,
     examples: [
       {
@@ -1672,7 +1689,7 @@ const GRAMMAR_DB = [
     id: 134,
     grammar: "〜まえに",
     meaning: "在～之前～（時間上）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 106,
     supplement: "即使句尾是過去式，也要用辭書形",
     examples: [
@@ -1686,7 +1703,7 @@ const GRAMMAR_DB = [
     id: 135,
     grammar: "〜ほしい",
     meaning: "希望你做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 178,
     examples: [{ jp: "ピサを注文してほしいです。", zh: "我希望你叫披薩。" }],
   },
@@ -1694,7 +1711,7 @@ const GRAMMAR_DB = [
     id: 136,
     grammar: "〜でしょう",
     meaning: "推測可能～吧",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 130,
     supplement: "降調，表示推測，不像 です 那麼肯定",
     examples: [
@@ -1705,7 +1722,7 @@ const GRAMMAR_DB = [
     id: 137,
     grammar: "〜より〜（の）ほう〜",
     meaning: "比起⋯更⋯",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 131,
     supplement:
       "對兩件事物比較後，選擇了 ほう 前面的事物。より跟 ほう的順序可以調換。",
@@ -1721,7 +1738,7 @@ const GRAMMAR_DB = [
     id: 138,
     grammar: "〜あまり〜ない",
     meaning: "不怎麼～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 132,
     examples: [
       {
@@ -1734,7 +1751,7 @@ const GRAMMAR_DB = [
     id: 139,
     grammar: "〜までに",
     meaning: "在～（時間）之前做",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 138,
     supplement: "表示動作在期限之前的某時間點執行",
     examples: [
@@ -1745,7 +1762,7 @@ const GRAMMAR_DB = [
     id: 140,
     grammar: "〜ても／でも",
     meaning: "即使～也",
-    prefix: ["動詞て形", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.ADJ],
     page: 141,
     supplement:
       "1. 動詞 て 形 + ても\n2. 形容詞 く + ても\n3. 名詞、形容動詞 + でも",
@@ -1761,7 +1778,7 @@ const GRAMMAR_DB = [
     id: 141,
     grammar: "〜なければならない",
     meaning: "（社會常識上）必須～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 163,
     examples: [
       { jp: "学生は勉強しなければならない。", zh: "學生必須用功唸書。" },
@@ -1771,7 +1788,7 @@ const GRAMMAR_DB = [
     id: 142,
     grammar: "〜ないわけにはいかない",
     meaning: "（不情願）不得不",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 165,
     examples: [{ jp: "行かないわけにはいかない。", zh: "不得不去。" }],
   },
@@ -1779,7 +1796,7 @@ const GRAMMAR_DB = [
     id: 143,
     grammar: "〜べきだ",
     meaning: "（做人原則上）必須～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 164,
     examples: [
       {
@@ -1792,7 +1809,7 @@ const GRAMMAR_DB = [
     id: 144,
     grammar: "〜ないこともない",
     meaning: "也不是沒有～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 287,
     examples: [
       {
@@ -1805,7 +1822,7 @@ const GRAMMAR_DB = [
     id: 145,
     grammar: "〜てみせる",
     meaning: "做給別人看",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 172,
     examples: [
       { jp: "今度は合格してみせる。", zh: "我這次絕對會考過給你看。" },
@@ -1815,7 +1832,7 @@ const GRAMMAR_DB = [
     id: 146,
     grammar: "〜にする",
     meaning: "決定（某事物）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 176,
     examples: [{ jp: "私はラーメンにします。", zh: "我要吃拉麵。" }],
   },
@@ -1823,7 +1840,7 @@ const GRAMMAR_DB = [
     id: 147,
     grammar: "〜かもしれない",
     meaning: "也許～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 186,
     supplement: "個人推測把握度：〜とおもう > だろう > かもしれない",
     examples: [
@@ -1837,7 +1854,7 @@ const GRAMMAR_DB = [
     id: 148,
     grammar: "〜（の）はずがない",
     meaning: "（照理說）不可能～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 188,
     supplement: "個人根據事實或知識的主觀推論。",
     examples: [{ jp: "七月の雪が降るがはずがない。", zh: "七月不可能下雪。" }],
@@ -1846,7 +1863,7 @@ const GRAMMAR_DB = [
     id: 149,
     grammar: "〜そうだ",
     meaning: "聽說（從別人、報章雜誌聽說）",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 199,
     supplement: "不能改否定或過去式。",
     examples: [
@@ -1860,7 +1877,7 @@ const GRAMMAR_DB = [
     id: 150,
     grammar: "〜（の）ような",
     meaning: "像～一樣",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 190,
     examples: [
       {
@@ -1873,7 +1890,7 @@ const GRAMMAR_DB = [
     id: 151,
     grammar: "〜みたい",
     meaning: "像～一樣（口語）",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 190,
     supplement: "不是很確定的推測",
     examples: [
@@ -1887,7 +1904,7 @@ const GRAMMAR_DB = [
     id: 152,
     grammar: "〜ことができる",
     meaning: "能～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 196,
     examples: [
       { jp: "私も会場の入ることができますか。", zh: "我也可以進會場嗎？" },
@@ -1897,7 +1914,7 @@ const GRAMMAR_DB = [
     id: 153,
     grammar: "〜やすい",
     meaning: "容易～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 197,
     supplement: "～にくい：很難～",
     examples: [
@@ -1911,7 +1928,7 @@ const GRAMMAR_DB = [
     id: 154,
     grammar: "〜すぎだ",
     meaning: "過於～",
-    prefix: ["動詞て形", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.ADJ],
     page: 199,
     supplement: "～すぎる：結合單字做動詞使用\n〜すぎだ：結合單字做名詞使用",
     examples: [
@@ -1922,7 +1939,7 @@ const GRAMMAR_DB = [
     id: 155,
     grammar: "〜という",
     meaning: "叫做～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 200,
     examples: [
       {
@@ -1935,7 +1952,7 @@ const GRAMMAR_DB = [
     id: 156,
     grammar: "〜という／書く／聞く",
     meaning: "說是、寫說、聽說（引用）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 200,
     examples: [
       {
@@ -1948,7 +1965,7 @@ const GRAMMAR_DB = [
     id: 157,
     grammar: "〜にたいして",
     meaning: "針對～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 327,
     examples: [
       {
@@ -1961,7 +1978,7 @@ const GRAMMAR_DB = [
     id: 158,
     grammar: "〜と",
     meaning: "一～就～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 232,
     examples: [{ jp: "氷が溶けると水になる。", zh: "冰溶化就變成水。" }],
   },
@@ -1969,7 +1986,7 @@ const GRAMMAR_DB = [
     id: 159,
     grammar: "〜ば",
     meaning: "如果～的話～",
-    prefix: ["動詞ば形"],
+    prefix: [PREFIX.VERB_BA],
     page: 233,
     examples: [
       { jp: "時間が合えば、会いたいです。", zh: "時間允許的話，想見一面。" },
@@ -1979,7 +1996,7 @@ const GRAMMAR_DB = [
     id: 160,
     grammar: "〜たら〜た",
     meaning: "（因為前項動作成立才發生）發現～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 235,
     supplement: "因果關係更強，後面一定接た形",
     examples: [
@@ -1993,7 +2010,7 @@ const GRAMMAR_DB = [
     id: 161,
     grammar: "〜たところ",
     meaning: "1. 結果（或不翻譯）",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 236,
     supplement: "帶有說話人訝異的語感，前後像沒有絕對因果關係。",
     examples: [
@@ -2007,7 +2024,7 @@ const GRAMMAR_DB = [
     id: 162,
     grammar: "〜てあげる",
     meaning: "我／我親友為同輩他人做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 243,
     examples: [
       { jp: "私は友達に宿題を手伝ってあげました。", zh: "我幫朋友寫了作業。" },
@@ -2017,7 +2034,7 @@ const GRAMMAR_DB = [
     id: 163,
     grammar: "〜やる",
     meaning: "我／我親友給予後輩他人～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 242,
     examples: [
       { jp: "私は息子にスマホーをやりました。", zh: "我給了兒子手機。" },
@@ -2027,7 +2044,7 @@ const GRAMMAR_DB = [
     id: 164,
     grammar: "〜てやる",
     meaning: "我／我親友為後輩他人做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 243,
     supplement:
       "1. 說話者以給予利益的心情為他人做有益的事\n2. 說話人帶有不滿或積極意志，而做讓對方困擾的事。（我覺得就是在貶低對方）",
@@ -2046,7 +2063,7 @@ const GRAMMAR_DB = [
     id: 165,
     grammar: "〜さしあげる",
     meaning: "[謙讓] 我／我親友給予前輩他人～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 244,
     examples: [
       { jp: "今週中にご連絡を差し上げます。", zh: "本週內會跟您聯繫。" },
@@ -2056,7 +2073,7 @@ const GRAMMAR_DB = [
     id: 166,
     grammar: "〜てさしあげる",
     meaning: "[謙讓] 我／我親友為前輩他人做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 245,
     examples: [
       {
@@ -2069,7 +2086,7 @@ const GRAMMAR_DB = [
     id: 167,
     grammar: "〜いただく",
     meaning: "[謙讓] 我／我親友承蒙前輩他人給我～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 244,
     examples: [
       { jp: "先生に絵をいただきました。", zh: "我從老師那邊收到了畫作。" },
@@ -2079,7 +2096,7 @@ const GRAMMAR_DB = [
     id: 168,
     grammar: "〜ていただく",
     meaning: "[謙讓] 我／我親友承蒙前輩他人為我做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 245,
     examples: [
       {
@@ -2092,7 +2109,7 @@ const GRAMMAR_DB = [
     id: 169,
     grammar: "〜もらう",
     meaning: "A 從同輩他人那裡得到～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 246,
     examples: [
       { jp: "彼は友達に団子をもらいました。", zh: "他從朋友那裡得到丸子。" },
@@ -2102,7 +2119,7 @@ const GRAMMAR_DB = [
     id: 170,
     grammar: "〜てもらう",
     meaning: "我／我親友請同輩他人為我做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 247,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/31",
     examples: [
@@ -2113,7 +2130,7 @@ const GRAMMAR_DB = [
     id: 171,
     grammar: "〜くれる",
     meaning: "同輩他人給我／我親友～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 247,
     examples: [{ jp: "友達は私に団子をくれました。", zh: "朋友給了我丸子。" }],
   },
@@ -2121,7 +2138,7 @@ const GRAMMAR_DB = [
     id: 172,
     grammar: "〜てくれる",
     meaning: "同輩他人為我／我親友做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 247,
     examples: [
       { jp: "友達は私に宿題をやってくれました。", zh: "朋友幫我寫了作業。" },
@@ -2131,7 +2148,7 @@ const GRAMMAR_DB = [
     id: 173,
     grammar: "〜くださる",
     meaning: "[尊敬] 前輩他人給我／我親友～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 249,
     examples: [
       { jp: "先生は果物をくださいました。", zh: "老師送了水果給我。" },
@@ -2141,7 +2158,7 @@ const GRAMMAR_DB = [
     id: 174,
     grammar: "〜てくださる",
     meaning: "[尊敬] 前輩他人為我／我親友做～",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 250,
     examples: [
       {
@@ -2154,7 +2171,7 @@ const GRAMMAR_DB = [
     id: 175,
     grammar: "〜（ら）れる",
     meaning: "被～",
-    prefix: ["動詞受身形"],
+    prefix: [PREFIX.VERB_PASSIVE],
     page: 256,
     supplement:
       "1. 直接承受別人的動作\n2. 社會活動的客觀描述\n3. 因某人行為或天氣，間接受到麻煩",
@@ -2167,7 +2184,7 @@ const GRAMMAR_DB = [
     id: 176,
     grammar: "〜（さ）せる",
     meaning: "要求～",
-    prefix: ["動詞使役形"],
+    prefix: [PREFIX.VERB_CAUSATIVE],
     page: 257,
     supplement:
       "1. 某人強迫他人做某事\n2. 用言行促使他人自然地做某種行為，通常用人難以控制的情緒動詞",
@@ -2179,7 +2196,7 @@ const GRAMMAR_DB = [
     id: 177,
     grammar: "〜（さ）せておく",
     meaning: "放任～",
-    prefix: ["動詞使役形"],
+    prefix: [PREFIX.VERB_CAUSATIVE],
     page: 257,
     examples: [
       {
@@ -2192,7 +2209,7 @@ const GRAMMAR_DB = [
     id: 178,
     grammar: "〜（さ）せられる",
     meaning: "被迫～",
-    prefix: ["動詞使役受身形"],
+    prefix: [PREFIX.VERB_CAUSATIVE_PASSIVE],
     page: 258,
     supplement: "含有不情願、受害的心情",
     examples: [
@@ -2203,7 +2220,7 @@ const GRAMMAR_DB = [
     id: 179,
     grammar: "〜でございます",
     meaning: "[鄭重] です",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 258,
     examples: [{ jp: "じゃ、お客様でございます。", zh: "那您就是客人了。" }],
   },
@@ -2211,7 +2228,7 @@ const GRAMMAR_DB = [
     id: 180,
     grammar: "〜お（ご）〜になる",
     meaning: "[尊敬] （對方的動作）",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 260,
     supplement: "1. 其他動詞：お〜になる\n2. サ行變格：ご〜になる",
     examples: [
@@ -2226,7 +2243,7 @@ const GRAMMAR_DB = [
     id: 181,
     grammar: "〜お（ご）〜する",
     meaning: "[謙讓] （我的動作）",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 260,
     supplement: "1. 其他動詞：お〜する\n2. サ行變格：ご〜する",
     examples: [{ jp: "お手伝いしましょうか。", zh: "讓我來幫您吧。" }],
@@ -2235,7 +2252,7 @@ const GRAMMAR_DB = [
     id: 182,
     grammar: "〜お（ご）〜いたす",
     meaning: "[謙讓] （我的動作）",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 260,
     supplement: "比 お（ご）〜する 更謙讓",
     examples: [{ jp: "お手伝いいたしましょうか。", zh: "讓我來幫您吧。" }],
@@ -2244,7 +2261,7 @@ const GRAMMAR_DB = [
     id: 183,
     grammar: "〜お（ご）〜ください",
     meaning: "[尊敬] 請～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 262,
     supplement: "1. 其他動詞：お〜ください\n2. サ行變格：ご〜ください",
     examples: [
@@ -2256,7 +2273,7 @@ const GRAMMAR_DB = [
     id: 184,
     grammar: "〜（さ）せてください",
     meaning: "[尊敬] 請允許我做～",
-    prefix: ["動詞使役形"],
+    prefix: [PREFIX.VERB_CAUSATIVE],
     page: 263,
     examples: [
       {
@@ -2269,7 +2286,7 @@ const GRAMMAR_DB = [
     id: 185,
     grammar: "〜（の）うちに",
     meaning: "趁著～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 270,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/03",
     examples: [
@@ -2283,7 +2300,7 @@ const GRAMMAR_DB = [
     id: 186,
     grammar: "〜（の）さい",
     meaning: "～的當時",
-    prefix: ["動詞た形", "動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 271,
     examples: [
       {
@@ -2296,7 +2313,7 @@ const GRAMMAR_DB = [
     id: 187,
     grammar: "〜ところだ",
     meaning: "正在～時",
-    prefix: ["動詞た形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT],
     page: 271,
     supplement:
       "V（連體形）＋ところだ 表示準備要進行的動作。\nV（テ形）＋いる＋ところだ 表示正在進行的動作。\nV（タ形）＋ところだ 表示剛完成不久的動作。\nV（テ形）＋いた＋ところだ 表示直到說話前在進行的動作。",
@@ -2312,7 +2329,7 @@ const GRAMMAR_DB = [
     id: 188,
     grammar: "〜（の）さいちゅう（に）",
     meaning: "〜正在～時",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 271,
     examples: [
       {
@@ -2325,7 +2342,7 @@ const GRAMMAR_DB = [
     id: 189,
     grammar: "〜とたん（に）",
     meaning: "～剛～就",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 272,
     supplement: "前項動作剛完成的瞬間，就有了後項變化，伴有意外語感。",
     examples: [
@@ -2339,7 +2356,7 @@ const GRAMMAR_DB = [
     id: 190,
     grammar: "〜いらい",
     meaning: "〜自～以來",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 273,
     examples: [
       {
@@ -2352,7 +2369,7 @@ const GRAMMAR_DB = [
     id: 191,
     grammar: "〜（の）おかげだ",
     meaning: "托您的福",
-    prefix: ["動詞た形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN, PREFIX.ADJ],
     page: 278,
     examples: [
       {
@@ -2365,7 +2382,7 @@ const GRAMMAR_DB = [
     id: 192,
     grammar: "〜によって（は）／による／により",
     meaning: "1. 以～為手段、方法\n2. 根據～\n3. 由於～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 280,
     supplement: "により 比 によって 正式，修飾整句",
     examples: [
@@ -2383,7 +2400,7 @@ const GRAMMAR_DB = [
     id: 193,
     grammar: "〜（の）せいか",
     meaning: "（壞事）可能是因為～吧",
-    prefix: ["動詞た形", "動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 279,
     examples: [
       {
@@ -2396,7 +2413,7 @@ const GRAMMAR_DB = [
     id: 194,
     grammar: "〜ものだから／もので",
     meaning: "正是因為～所以",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 281,
     supplement: "表達事態嚴重，因此做了某事，不是自己願意的語氣。",
     examples: [
@@ -2410,7 +2427,7 @@ const GRAMMAR_DB = [
     id: 195,
     grammar: "〜（の）おそれがある",
     meaning: "恐怕會～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 286,
     examples: [
       {
@@ -2423,7 +2440,7 @@ const GRAMMAR_DB = [
     id: 196,
     grammar: "〜にきまっている",
     meaning: "～肯定是這樣",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 287,
     supplement: "表達很有信心的推測",
     examples: [
@@ -2437,7 +2454,7 @@ const GRAMMAR_DB = [
     id: 197,
     grammar: "〜よりない／よりしかたがない／よりほかない",
     meaning: "只能～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 288,
     supplement: "表達除此之外沒有其他辦法",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/124",
@@ -2452,7 +2469,7 @@ const GRAMMAR_DB = [
     id: 198,
     grammar: "〜にちがいがない",
     meaning: "一定是～不會錯的",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 288,
     examples: [
       {
@@ -2465,7 +2482,7 @@ const GRAMMAR_DB = [
     id: 199,
     grammar: "〜（の）ではないだろうか",
     meaning: "不就是～嗎",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 289,
     examples: [
       { jp: "これは本当のことではないだろうか。", zh: "這不就是事實嗎？" },
@@ -2473,14 +2490,15 @@ const GRAMMAR_DB = [
   },
   {
     id: 200,
-    grammar: "〜ないかとおもう",
-    meaning: "我想是～吧",
-    prefix: ["動詞否定形", "形容詞"],
+    grammar: "〜（の）ではないかと思う",
+    meaning: "不是～嗎",
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 289,
+    url: "https://www.sigure.tw/learn-japanese/grammar/n3/137",
     examples: [
       {
-        jp: "彼は誰もよりも君を愛していたのではないかと思う。",
-        zh: "我想他比誰都更愛你吧。",
+        jp: "これはいいアイデアなんじゃないかと思う。",
+        zh: "我想這是個好點子不是嗎？",
       },
     ],
   },
@@ -2488,7 +2506,7 @@ const GRAMMAR_DB = [
     id: 201,
     grammar: "〜（の）わけだ",
     meaning: "難怪～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 290,
     examples: [
       {
@@ -2501,7 +2519,7 @@ const GRAMMAR_DB = [
     id: 202,
     grammar: "〜（の）わけがない／わけはない",
     meaning: "不可能～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 295,
     examples: [
       {
@@ -2514,7 +2532,7 @@ const GRAMMAR_DB = [
     id: 203,
     grammar: "〜わけではない／わけでもない",
     meaning: "並不是～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 296,
     examples: [
       {
@@ -2527,7 +2545,7 @@ const GRAMMAR_DB = [
     id: 204,
     grammar: "〜（な）んじゃない／んじゃないかとおもう",
     meaning: "～不是嗎？",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 297,
     supplement: "口語形",
     examples: [{ jp: "彼はもう帰ったんじゃない。", zh: "他已經回去了吧。" }],
@@ -2536,7 +2554,7 @@ const GRAMMAR_DB = [
     id: 205,
     grammar: "〜かける",
     meaning: "才剛開始～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 301,
     supplement: "表行為已經開始，但還沒結束。",
     examples: [
@@ -2550,7 +2568,7 @@ const GRAMMAR_DB = [
     id: 206,
     grammar: "〜がち",
     meaning: "～傾向於",
-    prefix: ["動詞ます形", "名詞"],
+    prefix: [PREFIX.VERB_MASU, PREFIX.NOUN],
     page: 302,
     supplement: "負面評價",
     examples: [
@@ -2561,7 +2579,7 @@ const GRAMMAR_DB = [
     id: 207,
     grammar: "〜ぎみ",
     meaning: "感覺有點～",
-    prefix: ["動詞て形", "名詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.NOUN],
     page: 302,
     supplement: "表示當下主觀感受",
     examples: [
@@ -2572,7 +2590,7 @@ const GRAMMAR_DB = [
     id: 208,
     grammar: "〜だらけ",
     meaning: "到處是～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 303,
     supplement: "負面評價",
     examples: [{ jp: "あの人は借金だらけだ。", zh: "那個人欠了一屁股債。" }],
@@ -2581,7 +2599,7 @@ const GRAMMAR_DB = [
     id: 209,
     grammar: "〜むき",
     meaning: "（本質上）面向、適合～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 307,
     examples: [
       {
@@ -2594,7 +2612,7 @@ const GRAMMAR_DB = [
     id: 210,
     grammar: "〜むけ",
     meaning: "（設計得）針對～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 307,
     examples: [
       {
@@ -2607,7 +2625,7 @@ const GRAMMAR_DB = [
     id: 211,
     grammar: "〜くらい",
     meaning: "～的程度",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 311,
     examples: [
       {
@@ -2620,7 +2638,7 @@ const GRAMMAR_DB = [
     id: 212,
     grammar: "〜ば〜ほど",
     meaning: "越～越～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 312,
     examples: [
       {
@@ -2633,7 +2651,7 @@ const GRAMMAR_DB = [
     id: 213,
     grammar: "〜どおり",
     meaning: "正如〜",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 318,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/64",
     examples: [{ jp: "結果は、予想どおりだった。", zh: "結果跟預想的一樣。" }],
@@ -2642,7 +2660,7 @@ const GRAMMAR_DB = [
     id: 214,
     grammar: "〜をもとに（して）",
     meaning: "以～為參考、啟示～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 318,
     supplement: "後者可能跟前者差很多，僅以前者作爲參考、發想",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/136",
@@ -2657,7 +2675,7 @@ const GRAMMAR_DB = [
     id: 215,
     grammar: "〜にともなって",
     meaning: "隨著～（因此產生變化）",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 320,
     examples: [
       {
@@ -2670,7 +2688,7 @@ const GRAMMAR_DB = [
     id: 216,
     grammar: "〜とともに",
     meaning: "隨著～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 319,
     supplement: "後項隨著前項同時發生",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/71",
@@ -2685,7 +2703,7 @@ const GRAMMAR_DB = [
     id: 217,
     grammar: "〜につれて",
     meaning: "隨著～（同時變化）",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 319,
     examples: [
       {
@@ -2698,7 +2716,7 @@ const GRAMMAR_DB = [
     id: 218,
     grammar: "〜からいうと／いって",
     meaning: "從～來看",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 323,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/12",
     examples: [
@@ -2712,7 +2730,7 @@ const GRAMMAR_DB = [
     id: 219,
     grammar: "〜としたら／とすると／とすれば",
     meaning: "如果～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 325,
     supplement:
       "• としたら：以前項為前提，判斷或評價\n  • たら：如果前項成立，後項會實現",
@@ -2728,7 +2746,7 @@ const GRAMMAR_DB = [
     id: 220,
     grammar: "〜にかんして",
     meaning: "～關於",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 325,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/79",
     examples: [
@@ -2742,7 +2760,7 @@ const GRAMMAR_DB = [
     id: 221,
     grammar: "〜にとって",
     meaning: "對～來說",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 327,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/87",
     examples: [
@@ -2756,7 +2774,7 @@ const GRAMMAR_DB = [
     id: 222,
     grammar: "〜にもとづいて",
     meaning: "以～為根據",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 332,
     supplement: "後者不會偏離前者",
     examples: [
@@ -2767,7 +2785,7 @@ const GRAMMAR_DB = [
     id: 223,
     grammar: "〜をちゅうしんに（して）",
     meaning: "以～為中心",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 334,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/133",
     examples: [
@@ -2781,7 +2799,7 @@ const GRAMMAR_DB = [
     id: 224,
     grammar: "〜をとおして／をつうじて",
     meaning: "1. 透過\n  2. 在整個期間",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 335,
     supplement: "つうじて比較正式，較被動偶然",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/134",
@@ -2800,7 +2818,7 @@ const GRAMMAR_DB = [
     id: 225,
     grammar: "〜（の）かわりに",
     meaning: "代替～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 336,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/14",
     examples: [
@@ -2811,7 +2829,7 @@ const GRAMMAR_DB = [
     id: 226,
     grammar: "〜もの／もん",
     meaning: "因為～嘛",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 346,
     supplement:
       "表示原因理由，屬於較隨便的口語，通常用於主張自己行為的合理性，多有辯解的意味。",
@@ -2827,7 +2845,7 @@ const GRAMMAR_DB = [
     id: 227,
     grammar: "〜てたまらない",
     meaning: "～得受不了",
-    prefix: ["形容詞"],
+    prefix: [PREFIX.ADJ],
     page: 347,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/52",
     examples: [{ jp: "北海道は寒くてたまらない。", zh: "北海道冷得受不了。" }],
@@ -2836,7 +2854,7 @@ const GRAMMAR_DB = [
     id: 228,
     grammar: "〜てならない",
     meaning: "～不禁",
-    prefix: ["動詞て形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.NOUN, PREFIX.ADJ],
     page: 347,
     supplement: "表情感上的受不了",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/54",
@@ -2848,7 +2866,7 @@ const GRAMMAR_DB = [
     id: 229,
     grammar: "〜をこめて",
     meaning: "傾注（感情）～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 348,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/131",
     examples: [
@@ -2862,7 +2880,7 @@ const GRAMMAR_DB = [
     id: 230,
     grammar: "〜ようがない",
     meaning: "完全無法～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 353,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/121",
     examples: [
@@ -2876,7 +2894,7 @@ const GRAMMAR_DB = [
     id: 231,
     grammar: "〜さえ〜ば",
     meaning: "只要～就夠了",
-    prefix: ["動詞て形", "動詞ます形", "名詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.VERB_MASU, PREFIX.NOUN],
     page: 358,
     url: "https://nani-blog.com/jlpt-grammar-saeba/",
     examples: [
@@ -2890,7 +2908,7 @@ const GRAMMAR_DB = [
     id: 232,
     grammar: "たとえ〜ても〜",
     meaning: "即使、哪怕",
-    prefix: ["句首"],
+    prefix: [PREFIX.SENTENCE_START],
     page: 359,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/37",
     examples: [
@@ -2904,7 +2922,7 @@ const GRAMMAR_DB = [
     id: 233,
     grammar: "〜てくる",
     meaning: "表距離由遠而近、表動作後會再回來、表狀態顯現⋯⋯",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/17",
     examples: [
       { jp: "バスがやってきました。", zh: "公車朝這裡開過來了。" },
@@ -2919,7 +2937,7 @@ const GRAMMAR_DB = [
     id: 234,
     grammar: "〜てからでないと／てからでなければ",
     meaning: "不先（做前項）就不能（做後項）",
-    prefix: ["動詞て形"],
+    prefix: [PREFIX.VERB_TE],
     page: 360,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/48",
     examples: [
@@ -2933,7 +2951,7 @@ const GRAMMAR_DB = [
     id: 235,
     grammar: "〜ことにしている",
     meaning: "都會～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 367,
     supplement:
       "「ことにしている」是由「決定（ことにする）」而衍生的習慣，\n「ようにする」則是「期許能達成（できるだけするように）」而養成的習慣。",
@@ -2944,7 +2962,7 @@ const GRAMMAR_DB = [
     id: 236,
     grammar: "〜ことになっている",
     meaning: "按規定～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 368,
     supplement: "表示這項內容是已經成立的常規狀態。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/26",
@@ -2959,7 +2977,7 @@ const GRAMMAR_DB = [
     id: 237,
     grammar: "〜にくわえて",
     meaning: "加上～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 375,
     url: "https://mainichi-nonbiri.com/grammar/n2-nikuwaete/",
     examples: [
@@ -2973,7 +2991,7 @@ const GRAMMAR_DB = [
     id: 238,
     grammar: "〜とか",
     meaning: "1. 之類～\n  2. 好像是～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 374,
     supplement: "表示「內容不確定，有些是聽說的，我自己也不清楚」",
     examples: [
@@ -2987,7 +3005,7 @@ const GRAMMAR_DB = [
     id: 239,
     grammar: "〜っけ",
     meaning: "是不是～來著",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 374,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/42",
     examples: [
@@ -3001,7 +3019,7 @@ const GRAMMAR_DB = [
     id: 240,
     grammar: "〜をはじめ",
     meaning: "以～為首",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 379,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/135",
     examples: [
@@ -3015,7 +3033,7 @@ const GRAMMAR_DB = [
     id: 241,
     grammar: "〜（の）くせに",
     meaning: "明明～卻～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 384,
     supplement: "帶有譴責、不滿、輕蔑語氣",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/18",
@@ -3030,7 +3048,7 @@ const GRAMMAR_DB = [
     id: 242,
     grammar: "〜くらいなら",
     meaning: "與其～不如～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 385,
     supplement: "後句常跟「まし」搭配。",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/19",
@@ -3045,7 +3063,7 @@ const GRAMMAR_DB = [
     id: 243,
     grammar: "〜としても",
     meaning: "即使～也～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 385,
     url: "https://nani-blog.com/jlpt-grammar-tositemo/",
     examples: [
@@ -3059,7 +3077,7 @@ const GRAMMAR_DB = [
     id: 244,
     grammar: "〜にはんして",
     meaning: "與～相反",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 389,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/90",
     examples: [
@@ -3073,7 +3091,7 @@ const GRAMMAR_DB = [
     id: 245,
     grammar: "〜（である）はんめん",
     meaning: "另一方面～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 390,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/101",
     examples: [
@@ -3087,7 +3105,7 @@ const GRAMMAR_DB = [
     id: 246,
     grammar: "〜って",
     meaning: "某人說～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 405,
     supplement:
       "1. 「んだって」表示聽來的消息\n  2. 「って」直接引述某人講的話",
@@ -3100,7 +3118,7 @@ const GRAMMAR_DB = [
     id: 247,
     grammar: "〜から〜にかけて",
     meaning: "從～到",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 423,
     supplement:
       "から～まで 強調動作始末\nから〜にかけて 則只是表達橫跨兩端時間或空間",
@@ -3116,7 +3134,7 @@ const GRAMMAR_DB = [
     id: 248,
     grammar: "〜きる",
     meaning: "動作做到極限",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 424,
     supplement: "複合動詞",
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/17",
@@ -3131,7 +3149,7 @@ const GRAMMAR_DB = [
     id: 249,
     grammar: "〜にわたる",
     meaning: "長達～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 433,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/92",
     examples: [
@@ -3142,7 +3160,7 @@ const GRAMMAR_DB = [
     id: 250,
     grammar: "〜めぐって",
     meaning: "～圍繞著",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 442,
     url: "https://mainichi-nonbiri.com/grammar/n2-womegutte/",
     examples: [
@@ -3156,7 +3174,7 @@ const GRAMMAR_DB = [
     id: 251,
     grammar: "〜におうじて",
     meaning: "順應～而動作",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 443,
     url: "https://aiueo.cc/pages/cht/grammar/web/473.php",
     examples: [
@@ -3170,7 +3188,7 @@ const GRAMMAR_DB = [
     id: 252,
     grammar: "〜にかけては",
     meaning: "～至少在這方面",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 444,
     supplement: "表示「其他姑且不論，至少這方面來說」，後面多接讚賞",
     url: "https://aiueo.cc/pages/cht/grammar/web/478.php",
@@ -3185,7 +3203,7 @@ const GRAMMAR_DB = [
     id: 253,
     grammar: "〜にこたえて",
     meaning: "回應～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 445,
     url: "https://aiueo.cc/pages/cht/grammar/web/465.php",
     examples: [
@@ -3199,7 +3217,7 @@ const GRAMMAR_DB = [
     id: 254,
     grammar: "〜にそって",
     meaning: "沿著～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 448,
     url: "https://aiueo.cc/pages/cht/grammar/web/461.php",
     examples: [
@@ -3213,7 +3231,7 @@ const GRAMMAR_DB = [
     id: 255,
     grammar: "〜からして",
     meaning: "從～來看",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 449,
     supplement: "表達以某個範例為依據對整體做出判斷或評價",
     url: "https://aiueo.cc/pages/cht/grammar/web/438.php",
@@ -3228,7 +3246,7 @@ const GRAMMAR_DB = [
     id: 256,
     grammar: "〜からといって",
     meaning: "不能只因為～就",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 449,
     url: "https://aiueo.cc/pages/cht/grammar/web/439.php",
     examples: [
@@ -3242,7 +3260,7 @@ const GRAMMAR_DB = [
     id: 257,
     grammar: "〜からすれば／からすると",
     meaning: "從～來看",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 450,
     url: "https://aiueo.cc/pages/cht/grammar/web/310.php",
     examples: [
@@ -3256,7 +3274,7 @@ const GRAMMAR_DB = [
     id: 258,
     grammar: "〜からみれば／からみると",
     meaning: "從～來看",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 451,
     url: "https://aiueo.cc/pages/cht/grammar/web/311.php",
     examples: [
@@ -3270,7 +3288,7 @@ const GRAMMAR_DB = [
     id: 259,
     grammar: "〜（の）うえ（で）",
     meaning: "在～之後",
-    prefix: ["動詞た形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN],
     page: 455,
     url: "https://www.sigure.tw/learn-japanese/grammar/n2/08",
     examples: [
@@ -3284,7 +3302,7 @@ const GRAMMAR_DB = [
     id: 260,
     grammar: "〜（の）すえ（に）",
     meaning: "結果",
-    prefix: ["動詞た形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN],
     page: 455,
     supplement: "表花了很多時間，有了最後結果。書面語。",
     url: "https://nani-blog.com/jlpt-grammar-sueni/",
@@ -3299,7 +3317,7 @@ const GRAMMAR_DB = [
     id: 261,
     grammar: "〜につけ（て）",
     meaning: "每當～就～（感覺）",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 457,
     url: "https://aiueo.cc/pages/cht/grammar/web/482.php",
     examples: [
@@ -3313,7 +3331,7 @@ const GRAMMAR_DB = [
     id: 262,
     grammar: "〜にさきだち",
     meaning: "在～之前，先～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 457,
     url: "https://aiueo.cc/pages/cht/grammar/web/467.php",
     examples: [
@@ -3327,7 +3345,7 @@ const GRAMMAR_DB = [
     id: 263,
     grammar: "〜ないうちに",
     meaning: "趁著還沒～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 458,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/03",
     examples: [
@@ -3341,7 +3359,7 @@ const GRAMMAR_DB = [
     id: 264,
     grammar: "〜（の）あげく（に）",
     meaning: "經過～到最後（負面）",
-    prefix: ["動詞た形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.NOUN],
     page: 461,
     supplement: "多用在負面結果",
     url: "https://www.sigure.tw/learn-japanese/grammar/n2/01",
@@ -3356,7 +3374,7 @@ const GRAMMAR_DB = [
     id: 265,
     grammar: "〜か〜ないかのうちに",
     meaning: "才剛～就",
-    prefix: ["動詞た形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT],
     page: 462,
     supplement: "表達兩個事件幾乎同時發生",
     url: "https://aiueo.cc/pages/cht/grammar/web/491.php",
@@ -3371,7 +3389,7 @@ const GRAMMAR_DB = [
     id: 266,
     grammar: "〜ときたら",
     meaning: "說到～（＋責怪、不滿）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 481,
     url: "http://ilovejp-blog.com/japanese-higher-30",
     examples: [
@@ -3385,7 +3403,7 @@ const GRAMMAR_DB = [
     id: 267,
     grammar: "〜（か）とおもうと／とおもったら",
     meaning: "剛～就～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 481,
     url: "https://aiueo.cc/pages/cht/grammar/web/475.php",
     examples: [
@@ -3399,7 +3417,7 @@ const GRAMMAR_DB = [
     id: 268,
     grammar: "〜ものなら",
     meaning: "要是能～的話",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 482,
     supplement: "帶有誇張語氣，表達難以實現的假設",
     examples: [
@@ -3413,7 +3431,7 @@ const GRAMMAR_DB = [
     id: 269,
     grammar: "〜ないかぎり",
     meaning: "若不～就不能～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 483,
     supplement: "如果不滿足某個條件，某件事就無法實現。",
     url: "https://aiueo.cc/pages/cht/grammar/web/361.php",
@@ -3428,7 +3446,7 @@ const GRAMMAR_DB = [
     id: 270,
     grammar: "〜ないことには",
     meaning: "如果不～就無法～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 487,
     url: "https://aiueo.cc/pages/cht/grammar/web/434.php",
     examples: [
@@ -3442,7 +3460,7 @@ const GRAMMAR_DB = [
     id: 271,
     grammar: "〜ぬきで／はぬきにして",
     meaning: "省去～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 488,
     url: "https://nani-blog.com/jlpt-grammar-wonukinisite/",
     examples: [
@@ -3456,7 +3474,7 @@ const GRAMMAR_DB = [
     id: 272,
     grammar: "〜をきっかけに",
     meaning: "以～為契機",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 489,
     url: "https://aiueo.cc/pages/cht/grammar/web/381.php",
     examples: [
@@ -3470,7 +3488,7 @@ const GRAMMAR_DB = [
     id: 273,
     grammar: "〜をけいきに",
     meaning: "以～為契機",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 490,
     supplement: "較書面語",
     url: "https://aiueo.cc/pages/cht/grammar/web/379.php",
@@ -3485,7 +3503,7 @@ const GRAMMAR_DB = [
     id: 274,
     grammar: "〜うえは",
     meaning: "既然～",
-    prefix: ["動詞た形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT],
     page: 469,
     url: "https://www.sigure.tw/learn-japanese/grammar/n2/10",
     examples: [
@@ -3499,7 +3517,7 @@ const GRAMMAR_DB = [
     id: 275,
     grammar: "〜（の）かぎり",
     meaning: "〜在範圍內",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 468,
     url: "https://yasuwangblog.com/kagiri-zh/",
     examples: [
@@ -3513,7 +3531,7 @@ const GRAMMAR_DB = [
     id: 276,
     grammar: "〜（の）うえ（に）",
     meaning: "不僅～而且",
-    prefix: ["名詞", "形容詞"],
+    prefix: [PREFIX.NOUN, PREFIX.ADJ],
     page: 469,
     url: "https://www.sigure.tw/learn-japanese/grammar/n2/09",
     examples: [
@@ -3527,7 +3545,7 @@ const GRAMMAR_DB = [
     id: 277,
     grammar: "〜（の）ことだから",
     meaning: "以～來說～（判斷）",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 470,
     url: "https://aiueo.cc/pages/cht/grammar/web/429.php",
     examples: [
@@ -3541,7 +3559,7 @@ const GRAMMAR_DB = [
     id: 278,
     grammar: "〜あまり（に）",
     meaning: "因為過於～",
-    prefix: ["動詞た形", "動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 470,
     url: "https://www.sigure.tw/learn-japanese/grammar/n2/02",
     examples: [
@@ -3555,7 +3573,7 @@ const GRAMMAR_DB = [
     id: 279,
     grammar: "〜だけに",
     meaning: "～正因為",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 471,
     url: "https://www.hikky.com.tw/propage.php?P_id=263&PC_id=19",
     examples: [
@@ -3569,7 +3587,7 @@ const GRAMMAR_DB = [
     id: 280,
     grammar: "〜ことから",
     meaning: "1. 從～來看\n  2. 因為～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 474,
     url: "https://aiueo.cc/pages/cht/grammar/web/428.php",
     examples: [
@@ -3583,7 +3601,7 @@ const GRAMMAR_DB = [
     id: 281,
     grammar: "〜せいで",
     meaning: "都怪～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 474,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/33",
     examples: [
@@ -3597,7 +3615,7 @@ const GRAMMAR_DB = [
     id: 282,
     grammar: "〜にしても",
     meaning: "就算～也～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 497,
     supplement: "提出極端的假設條件，並表達意見或評價",
     url: "https://aiueo.cc/pages/cht/grammar/web/471.php",
@@ -3612,7 +3630,7 @@ const GRAMMAR_DB = [
     id: 283,
     grammar: "〜ながら（に／も）",
     meaning: "雖然～，但是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 494,
     url: "https://colanekojp.com.tw/classroom_detail/168",
     examples: [
@@ -3626,7 +3644,7 @@ const GRAMMAR_DB = [
     id: 284,
     grammar: "〜どころか",
     meaning: "非但沒有～還～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 494,
     supplement: "強調情況繼續惡化",
     url: "https://aiueo.cc/pages/cht/grammar/web/384.php",
@@ -3641,7 +3659,7 @@ const GRAMMAR_DB = [
     id: 285,
     grammar: "〜ものの",
     meaning: "雖然～，但是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 495,
     url: "https://colanekojp.com.tw/classroom_detail/263",
     examples: [
@@ -3655,7 +3673,7 @@ const GRAMMAR_DB = [
     id: 286,
     grammar: "〜とはいえ",
     meaning: "雖說～但～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 495,
     supplement: "表達不完全贊同",
     url: "https://aiueo.cc/pages/cht/grammar/web/562.php",
@@ -3670,7 +3688,7 @@ const GRAMMAR_DB = [
     id: 287,
     grammar: "〜にしろ",
     meaning: "就算～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 501,
     supplement: "極端的假設條件，並表達意見或評價",
     url: "https://aiueo.cc/pages/cht/grammar/web/471.php",
@@ -3685,7 +3703,7 @@ const GRAMMAR_DB = [
     id: 288,
     grammar: "〜にかかわらず",
     meaning: "無論～都～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 501,
     url: "https://colanekojp.com.tw/classroom_detail/708",
     examples: [{ jp: "するかしないかに関わらず", zh: "不管做不做" }],
@@ -3694,7 +3712,7 @@ const GRAMMAR_DB = [
     id: 289,
     grammar: "〜にもかかわらず",
     meaning: "雖然～但是",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 503,
     supplement: "類似「のに」",
     url: "https://colanekojp.com.tw/classroom_detail/708",
@@ -3709,7 +3727,7 @@ const GRAMMAR_DB = [
     id: 290,
     grammar: "〜にせよ",
     meaning: "就算～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 502,
     url: "https://aiueo.cc/pages/cht/grammar/web/471.php",
     examples: [
@@ -3723,7 +3741,7 @@ const GRAMMAR_DB = [
     id: 291,
     grammar: "〜にしては",
     meaning: "以～來說，算～",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 502,
     supplement: "事實與說話者抱持的評價、期待相差很大時使用。",
     url: "https://colanekojp.com.tw/classroom_detail/106",
@@ -3738,7 +3756,7 @@ const GRAMMAR_DB = [
     id: 292,
     grammar: "〜だけあって／〜だけのことはある",
     meaning: "不愧是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 503,
     url: "https://aiueo.cc/pages/cht/grammar/web/498.php",
     examples: [
@@ -3749,7 +3767,7 @@ const GRAMMAR_DB = [
     id: 293,
     grammar: "〜もかまわず",
     meaning: "無視～，就～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 504,
     url: "https://aiueo.cc/pages/cht/grammar/web/452.php",
     examples: [
@@ -3763,7 +3781,7 @@ const GRAMMAR_DB = [
     id: 294,
     grammar: "〜ことなく",
     meaning: "沒有～就～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 507,
     url: "https://aiueo.cc/pages/cht/grammar/web/430.php",
     examples: [
@@ -3777,7 +3795,7 @@ const GRAMMAR_DB = [
     id: 295,
     grammar: "〜きり〜ない",
     meaning: "從那時起就不再～",
-    prefix: ["動詞た形"],
+    prefix: [PREFIX.VERB_TA],
     page: 508,
     supplement: "表示某個事情發生後，就一直是同一個狀態",
     url: "https://aiueo.cc/pages/cht/grammar/web/274.php",
@@ -3792,7 +3810,7 @@ const GRAMMAR_DB = [
     id: 296,
     grammar: "〜つつ",
     meaning: "1. 一邊～一邊～\n  2. 雖然～但是～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 510,
     url: "https://aiueo.cc/pages/cht/grammar/web/391.php",
     examples: [
@@ -3810,7 +3828,7 @@ const GRAMMAR_DB = [
     id: 297,
     grammar: "〜やら〜やら",
     meaning: "又是～、又是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 516,
     supplement: "多有心情不快的語感",
     url: "https://aiueo.cc/pages/cht/grammar/web/278.php",
@@ -3825,7 +3843,7 @@ const GRAMMAR_DB = [
     id: 298,
     grammar: "〜も〜ば／なら〜も",
     meaning: "不僅～又～",
-    prefix: ["動詞ば形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_BA, PREFIX.NOUN, PREFIX.ADJ],
     page: 517,
     supplement: "強調各種情況都有",
     url: "https://nani-blog.com/jlpt-grammar-mobamo/",
@@ -3841,7 +3859,7 @@ const GRAMMAR_DB = [
     id: 299,
     grammar: "〜にかぎって",
     meaning: "唯獨～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 520,
     url: "https://aiueo.cc/pages/cht/grammar/web/357.php",
     examples: [
@@ -3855,7 +3873,7 @@ const GRAMMAR_DB = [
     id: 300,
     grammar: "〜のみならず",
     meaning: "不只～而且～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 524,
     url: "https://aiueo.cc/pages/cht/grammar/web/661.php",
     examples: [
@@ -3869,7 +3887,7 @@ const GRAMMAR_DB = [
     id: 301,
     grammar: "〜（數量詞）ばかり",
     meaning: "大約～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 526,
     url: "https://jp.sonic-learning.com/2012/03/20/mgl06/",
     examples: [
@@ -3880,7 +3898,7 @@ const GRAMMAR_DB = [
     id: 302,
     grammar: "〜はともかく",
     meaning: "姑且不管～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 533,
     url: "https://aiueo.cc/pages/cht/grammar/web/512.php",
     examples: [
@@ -3894,7 +3912,7 @@ const GRAMMAR_DB = [
     id: 303,
     grammar: "〜をとわず",
     meaning: "無論～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 533,
     url: "https://colanekojp.com.tw/classroom_detail/392",
     examples: [
@@ -3908,7 +3926,7 @@ const GRAMMAR_DB = [
     id: 304,
     grammar: "〜にかわって",
     meaning: "代替～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 535,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/78",
     examples: [
@@ -3922,7 +3940,7 @@ const GRAMMAR_DB = [
     id: 305,
     grammar: "〜のもとで",
     meaning: "在～的影響下",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 538,
     url: "https://aiueo.cc/pages/cht/grammar/web/509.php",
     examples: [
@@ -3936,7 +3954,7 @@ const GRAMMAR_DB = [
     id: 306,
     grammar: "〜（の）うえでは",
     meaning: "根據～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 540,
     url: "https://www.sigure.tw/learn-japanese/grammar/n3/93",
     examples: [
@@ -3950,7 +3968,7 @@ const GRAMMAR_DB = [
     id: 307,
     grammar: "〜まい",
     meaning: "1. 應該不會吧\n  2. 決定不",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 542,
     url: "https://colanekojp.com.tw/classroom_detail/13",
     examples: [
@@ -3962,7 +3980,7 @@ const GRAMMAR_DB = [
     id: 308,
     grammar: "〜というものではない",
     meaning: "並不是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 545,
     url: "https://aiueo.cc/pages/cht/grammar/web/426.php",
     examples: [
@@ -3976,7 +3994,7 @@ const GRAMMAR_DB = [
     id: 309,
     grammar: "〜というしまつだ",
     meaning: "結果竟然～",
-    prefix: ["動詞辭書形"],
+    prefix: [PREFIX.VERB_DICT],
     page: 545,
     supplement: "最終導致不良結果",
     url: "https://aiueo.cc/pages/cht/grammar/web/527.php",
@@ -3991,7 +4009,7 @@ const GRAMMAR_DB = [
     id: 310,
     grammar: "〜ようではないか",
     meaning: "我們（一起）～吧",
-    prefix: ["動詞意向形"],
+    prefix: [PREFIX.VERB_VOLITIONAL],
     page: 545,
     url: "https://aiueo.cc/pages/cht/grammar/web/303.php",
     examples: [
@@ -4005,7 +4023,7 @@ const GRAMMAR_DB = [
     id: 311,
     grammar: "〜にそういない",
     meaning: "～確定無誤",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 551,
     url: "https://aiueo.cc/pages/cht/grammar/web/489.php",
     examples: [
@@ -4019,7 +4037,7 @@ const GRAMMAR_DB = [
     id: 312,
     grammar: "〜にほかならない",
     meaning: "完全是～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 551,
     url: "https://colanekojp.com.tw/classroom_detail/771",
     examples: [
@@ -4033,7 +4051,7 @@ const GRAMMAR_DB = [
     id: 313,
     grammar: "〜ざるをえない",
     meaning: "不得不～",
-    prefix: ["動詞否定形"],
+    prefix: [PREFIX.VERB_NEG],
     page: 552,
     url: "https://aiueo.cc/pages/cht/grammar/web/495.php",
     examples: [
@@ -4047,7 +4065,7 @@ const GRAMMAR_DB = [
     id: 314,
     grammar: "〜うる／える",
     meaning: "可能～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 557,
     supplement: "否定形只能唸えない",
     url: "https://aiueo.cc/pages/cht/grammar/web/485.php",
@@ -4059,7 +4077,7 @@ const GRAMMAR_DB = [
     id: 315,
     grammar: "〜かねない",
     meaning: "可能～（發生不希望的結果）",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 558,
     url: "https://colanekojp.com.tw/classroom_detail/471",
     examples: [
@@ -4073,7 +4091,7 @@ const GRAMMAR_DB = [
     id: 316,
     grammar: "〜っこない",
     meaning: "不可能～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 558,
     url: "https://aiueo.cc/pages/cht/grammar/web/369.php",
     examples: [
@@ -4087,7 +4105,7 @@ const GRAMMAR_DB = [
     id: 317,
     grammar: "〜がたい",
     meaning: "難以～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 559,
     supplement: "表示該行為難度很高，不能用在表示能力不足時。",
     url: "https://aiueo.cc/pages/cht/grammar/web/214.php",
@@ -4099,7 +4117,7 @@ const GRAMMAR_DB = [
     id: 318,
     grammar: "〜にくい",
     meaning: "～很難",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 560,
     supplement:
       "「～づらい」主要表示「心理性」的困難，而「～にくい」可表示「心理性」，也能表示「物理、環境性」的困難。",
@@ -4112,7 +4130,7 @@ const GRAMMAR_DB = [
     id: 319,
     grammar: "〜かのようだ",
     meaning: "像～一樣的",
-    prefix: ["動詞た形", "動詞辭書形"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT],
     page: 565,
     supplement: "表達某事物看起來像某種情況，但實際上並非如此",
     url: "https://aiueo.cc/pages/cht/grammar/web/411.php",
@@ -4127,7 +4145,7 @@ const GRAMMAR_DB = [
     id: 320,
     grammar: "〜（の）ようだ",
     meaning: "好像～",
-    prefix: ["動詞た形", "動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_TA, PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 565,
     supplement: "依據自身的感覺做的主觀推斷",
     url: "https://www.sigure.tw/learn-japanese/grammar/n4/27",
@@ -4137,7 +4155,7 @@ const GRAMMAR_DB = [
     id: 321,
     grammar: "〜げ",
     meaning: "看起來～",
-    prefix: ["動詞ます形", "形容詞"],
+    prefix: [PREFIX.VERB_MASU, PREFIX.ADJ],
     page: 566,
     supplement: "表達某種外觀的氣氛",
     url: "https://aiueo.cc/pages/cht/grammar/web/365.php",
@@ -4152,7 +4170,7 @@ const GRAMMAR_DB = [
     id: 322,
     grammar: "〜つつある",
     meaning: "正在～",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 566,
     supplement: "書面語",
     url: "https://aiueo.cc/pages/cht/grammar/web/392.php",
@@ -4164,7 +4182,7 @@ const GRAMMAR_DB = [
     id: 323,
     grammar: "〜（よ）うとしている",
     meaning: "即將要",
-    prefix: ["動詞意向形"],
+    prefix: [PREFIX.VERB_VOLITIONAL],
     page: 567,
     supplement: "表變化即將發生",
     url: "https://nani-blog.com/jlpt-grammar-youtositeiru/",
@@ -4179,7 +4197,7 @@ const GRAMMAR_DB = [
     id: 324,
     grammar: "〜にすぎない",
     meaning: "不過是～",
-    prefix: ["動詞辭書形", "名詞", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 567,
     url: "https://aiueo.cc/pages/cht/grammar/web/488.php",
     examples: [
@@ -4193,7 +4211,7 @@ const GRAMMAR_DB = [
     id: 325,
     grammar: "〜てしょうがない",
     meaning: "～得不得了",
-    prefix: ["動詞て形", "形容詞"],
+    prefix: [PREFIX.VERB_TE, PREFIX.ADJ],
     page: 568,
     supplement: "表達某種無法抑制的強烈情緒",
     url: "https://aiueo.cc/pages/cht/grammar/web/304.php",
@@ -4205,7 +4223,7 @@ const GRAMMAR_DB = [
     id: 326,
     grammar: "〜ぬく",
     meaning: "～堅持到底",
-    prefix: ["動詞ます形"],
+    prefix: [PREFIX.VERB_MASU],
     page: 568,
     supplement: "是複合動詞",
     url: "https://nani-blog.com/jlpt-grammar-nuku/",
@@ -4220,7 +4238,7 @@ const GRAMMAR_DB = [
     id: 327,
     grammar: "〜どころではない",
     meaning: "現在不是做～的時候",
-    prefix: ["動詞辭書形", "名詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.NOUN],
     page: 569,
     url: "https://aiueo.cc/pages/cht/grammar/web/386.php",
     examples: [
@@ -4234,7 +4252,7 @@ const GRAMMAR_DB = [
     id: 328,
     grammar: "〜ものがある",
     meaning: "確實感到～",
-    prefix: ["動詞辭書形", "形容詞"],
+    prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     page: 576,
     supplement: "用來表達對事物的強烈評價",
     url: "https://aiueo.cc/pages/cht/grammar/web/420.php",
@@ -4249,7 +4267,7 @@ const GRAMMAR_DB = [
     id: 329,
     grammar: "〜しだいだ",
     meaning: "取決於～",
-    prefix: ["名詞"],
+    prefix: [PREFIX.NOUN],
     page: 578,
     url: "https://aiueo.cc/pages/cht/grammar/web/363.php",
     examples: [
