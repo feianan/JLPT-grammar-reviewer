@@ -356,10 +356,11 @@ const GRAMMAR_DB = [
   },
   {
     id: 29,
-    grammar: "にしろにしろ／〜にせよ〜にせよ／〜にしても〜にしても",
-    meaning: "～也好，～也好，都～",
+    grammar: "にしろ〜にしろ／〜にせよ〜にせよ／〜にしても〜にしても",
+    meaning: "A也好，B也好，都～",
     prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
-    url: "https://nihongonosensei.net/?p=11303",
+    url: "https://aiueo.cc/pages/cht/grammar/web/317.php",
+    supplement: "A 和 B 通常是相反的事物。",
     examples: [
       {
         jp: "続けるにせよ辞めるにせよ、決めるのは早いほうがいい。",
@@ -636,7 +637,7 @@ const GRAMMAR_DB = [
   },
   {
     id: 52,
-    grammar: "〜とこは〜が",
+    grammar: "〜ことは〜が",
     meaning: "雖然是～，但～",
     prefix: [PREFIX.VERB_DICT, PREFIX.ADJ],
     url: "https://nani-blog.com/jlpt-grammar-kotohaga/",
@@ -662,7 +663,7 @@ const GRAMMAR_DB = [
   {
     id: 54,
     grammar: "〜たり〜たりする",
-    meaning: "又是～，又是～",
+    meaning: "又是～，又是～（普通語氣）",
     prefix: [PREFIX.VERB_TA],
     page: 88,
     examples: [
@@ -3827,7 +3828,7 @@ const GRAMMAR_DB = [
   {
     id: 297,
     grammar: "〜やら〜やら",
-    meaning: "又是～、又是～",
+    meaning: "又是～，又是～（心情不快）",
     prefix: [PREFIX.VERB_DICT, PREFIX.NOUN, PREFIX.ADJ],
     page: 516,
     supplement: "多有心情不快的語感",
