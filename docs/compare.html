@@ -57,15 +57,19 @@
         const pair = COMPARE_PAIRS[cmpIdx];
         const el = document.getElementById("cmp-detail");
         el.innerHTML = `
+    ${pair.url ? `<a href="${pair.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display:block;width:100%;text-align:center;margin-bottom:var(--space-md);box-sizing:border-box;text-decoration:none">📖 參考資料</a>` : ""}
     <div class="grid2">
       ${pair.items
         .map((item) => {
-          const g = GRAMMAR_DB.find((x) => x.grammar === item.grammar) || {};
+          const g = item.id
+            ? (GRAMMAR_DB.find((x) => x.id === item.id) || {})
+            : {};
+          const label = g.grammar || item.grammar || "";
           return `<div class="compare-card">
-          <div style="font-size:var(--font-base);font-weight:700;color:var(--color-text-primary);margin-bottom:var(--space-sm)">${esc(item.grammar)}</div>
+          <div style="font-size:var(--font-base);font-weight:700;color:var(--color-text-primary);margin-bottom:var(--space-sm)">${esc(label)}</div>
           <div style="font-size:var(--font-xs);color:var(--color-primary-500);margin-bottom:.5rem">${esc(g.meaning || "")}</div>
           <div class="nuance-box">${esc(item.nuance)}</div>
-          ${g.examples[0]?.jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:var(--font-base)">${esc(g.examples[0].jp)}</div>${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}</div>` : ""}
+          ${g.examples && g.examples[0]?.jp ? `<div style="margin-top:.75rem"><div class="example-jp" style="font-size:var(--font-base)">${esc(g.examples[0].jp)}</div>${g.examples[0]?.zh ? `<div class="example-zh">${esc(g.examples[0].zh)}</div>` : ""}</div>` : ""}
         </div>`;
         })
         .join("")}
